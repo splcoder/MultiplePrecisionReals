@@ -11,7 +11,9 @@
 extern "C" {
 #endif
 
-
+JNIEXPORT jint		JNICALL Java_edu_spl_MPR_fixDigitsPrecision( JNIEnv *env, jobject obj, jint digits );
+JNIEXPORT void		JNICALL Java_edu_spl_MPR_freeMPR( JNIEnv *env, jobject obj, jlong p_dir );
+JNIEXPORT jlong		JNICALL Java_edu_spl_MPR_initConstant( JNIEnv *env, jobject obj, jint cte );
 
 #ifdef __cplusplus
 }
