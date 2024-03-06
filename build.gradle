@@ -1,0 +1,129 @@
+import org.gradle.internal.jvm.Jvm
+
+plugins {
+    id 'java'
+    id 'application'
+    id 'c'
+    //id 'cpp-application'
+    id 'cpp'
+}
+
+model {
+    toolChains {
+        gcc(Gcc) {
+            // Uncomment to use a GCC install that is not in the PATH
+            path "C:\\msys64\\mingw64\\bin"
+        }
+    }
+}
+
+
+mainClassName = 'Main'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+}
+
+//sourceCompatibility = 1.8
+//targetCompatibility = 1.8
+
+
+application {
+    applicationDefaultJvmArgs = ["-Djava.library.path=" + file("${buildDir}/libs/mpr/shared").absolutePath]
+}
+
+model {
+    platforms {
+        x64 {
+            architecture "x86_64"
+        }
+    }
+
+    components {
+
+        mpr( NativeLibrarySpec ){
+
+            sources {
+                c {
+                    source {
+                        srcDir "src/main/jni"
+                        srcDir "src/main/jni/numbers/"
+                        include "**/*.c"
+                    }
+                    exportedHeaders {
+                        srcDir "src/main/jni/"
+                        srcDir "src/main/jni/numbers/"
+                    }
+                }
+
+                cpp {
+                    source {
+                        srcDir "src/main/jni"
+                        srcDir "src/main/jni/numbers/"
+                        include "**/*.cpp"
+                    }
+                    exportedHeaders {
+                        srcDir "src/main/jni/"
+                        srcDir "src/main/jni/numbers/"
+                    }
+                }
+            }
+
+            /*
+            COMPILER:
+                1st libmpfr.a
+                2nd libgmpxx.a
+                3rd libgmp.a
+            */
+
+            targetPlatform "x64"
+            binaries.all {
+                def jvmHome = Jvm.current().javaHome
+                if (targetPlatform.operatingSystem.macOsX) {
+                    cCompiler.args '-I', "${jvmHome}/include"
+                    cCompiler.args '-I', "${jvmHome}/include/darwin"
+                    cCompiler.args '-mmacosx-version-min=10.4'
+
+                    cppCompiler.args '-I', "${jvmHome}/include"
+                    cppCompiler.args '-I', "${jvmHome}/include/darwin"
+                    cppCompiler.args '-mmacosx-version-min=10.4'
+
+                    linker.args '-mmacosx-version-min=10.4'
+                    //linker.args '-L/usr/local/lib', '-lquadmath'
+                    linker.args '-L/usr/local/lib', '-lmpfr', '-lgmpxx', '-lgmp'
+                } else if (targetPlatform.operatingSystem.linux) {
+                    cCompiler.args '-I', "${jvmHome}/include"
+                    cCompiler.args '-I', "${jvmHome}/include/linux"
+                    cCompiler.args '-D_FILE_OFFSET_BITS=64'
+
+                    cppCompiler.args '-I', "${jvmHome}/include"
+                    cppCompiler.args '-I', "${jvmHome}/include/linux"
+                    cppCompiler.args '-D_FILE_OFFSET_BITS=64'
+
+                    //linker.args '-L/usr/lib', '-lquadmath'
+                    linker.args '-L/usr/lib', '-lmpfr', '-lgmpxx', '-lgmp'
+                } else if (targetPlatform.operatingSystem.windows) {
+                    // compilador C
+                    cCompiler.args "-I${jvmHome}/include"
+                    cCompiler.args "-I${jvmHome}/include/win32"
+                    cCompiler.args "-I${System.getProperty('java.home')}/include"
+
+                    // compilador C++
+                    cppCompiler.args "-I${jvmHome}/include"
+                    cppCompiler.args "-I${jvmHome}/include/win32"
+                    cppCompiler.args "-I${System.getProperty('java.home')}/include"
+
+                    //linker.args '-lquadmath'
+                    linker.args '-lmpfr', '-lgmpxx', '-lgmp'
+                }
+            }
+        }
+
+    }
+}
+
+classes.dependsOn 'mprSharedLibrary'
