@@ -16,23 +16,12 @@ public class Main {
 	}
 	public static void main( String[] args ){
 		{
-			MPR my = new MPR();
-			MPR mpr2 = my;
-			my = null;
-			System.gc();
+			MPR myOne = MPR.M_PI;
+			double dOne = myOne.doubleValue();
+			long lOne = myOne.longValue();
+			System.out.println( "PI: " + myOne + ", double: " + dOne + ", long: " + lOne );
 		}
-		System.out.println( "Wait some seconds..." );
-
-		MPR myOne = MPR.ONE;
-		double dOne = myOne.doubleValue();
-		long lOne = myOne.longValue();
-		System.out.println( "UNO: " + myOne + ", double: " + dOne + ", long: " + lOne );
-
-		//waitSeconds( 10 );
-
-		List<Integer> myList = new ArrayList<>();
-		for( int i = 0; i < 1000; i++ )	myList.add( i );
-		myList = null;
+		System.gc();
 
 		//waitSeconds( 10 );
 

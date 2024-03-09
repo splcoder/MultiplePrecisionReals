@@ -1,10 +1,6 @@
 package edu.spl;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.lang.ref.PhantomReference;
-import java.lang.ref.ReferenceQueue;
-import java.lang.ref.WeakReference;
+import java.lang.ref.Cleaner;
 
 /**
  * Multiple Precision in Reals
@@ -13,83 +9,68 @@ import java.lang.ref.WeakReference;
  * 		https://openjdk.org/jeps/421
  *		https://www.baeldung.com/java-phantom-reference
  */
-public class MPR extends Number implements Comparable<MPR> {
+public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 	static {
 		//System.loadLibrary( "mpr" );
 		System.load("C:\\Users\\Sergio\\Desktop\\Cursos Certificacion\\Curso Java\\Projects\\MultiplePrecisionReals\\build\\libs\\mpr\\shared\\mpr.dll");
 	}
-
+	//------------------------------------------------------------------------------------------------------------------
+	// https://www.enyo.de/fw/notes/java-finalization-revisited.html
+	// https://docs.oracle.com/javase%2F9%2Fdocs%2Fapi%2F%2F/java/lang/ref/Cleaner.html
+	// >>> If the MPR is used in a try-finally block then the close method calls the cleaning action.
+	// >>> If the close method is not called, the cleaning action is called by the Cleaner when the MPR instance has become phantom reachable.
+	private final static Cleaner cleaner = Cleaner.create();
+	private final State state;
+	private final Cleaner.Cleanable cleanable;
+	private static class State implements Runnable {
+		final long handle;
+		State( long handle ){ this.handle = handle; }
+		public void run(){ MPR.freeMPR( handle ); }		// Deallocate
+	}
+	@Override
+	public void close(){ cleanable.clean(); }			// AutoCloseable
+	//------------------------------------------------------------------------------------------------------------------
 	public static final int DIGITS_PRECISION;
 	private static native int fixDigitsPrecision( int digits );
 	static {
 		DIGITS_PRECISION = fixDigitsPrecision( 50 );	// TODO <<< Set here the digits precision required for your project
 	}
-	//------------------------------------------------------------------------------------------------------------------
+	// Constants -------------------------------------------------------------------------------------------------------
 	private static native long initConstant( int cte );
-	public static final MPR ZERO = new MPR( 0, true );
-	public static final MPR ONE = new MPR( 1, true );
+	public static final MPR NAN				= new MPR( -6, true );
+	public static final MPR INF_P			= new MPR( -5, true );
+	public static final MPR INF_N			= new MPR( -4, true );
+	public static final MPR MAX				= new MPR( -3, true );	// largest finite number
+	public static final MPR MIN_P			= new MPR( -2, true );	// smallest positive number
+	//public static final MPR PRECISION		= new MPR( -1, true );	// TODO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	public static final MPR ZERO			= new MPR( 0, true );
+	public static final MPR ONE				= new MPR( 1, true );
+	// Math constants --------------------------------------------------------------------------------------------------
+	public static final MPR M_E_M			= new MPR( 2, true );	// Euler–Mascheroni constant (also called Euler's constant)
+	public static final MPR M_E				= new MPR( 3, true );
+	public static final MPR M_PI			= new MPR( 4, true );
+	public static final MPR M_LN2			= new MPR( 5, true );
+	public static final MPR M_CAT			= new MPR( 6, true );	// Catalan
 	//------------------------------------------------------------------------------------------------------------------
 	// "Pointer" to data
 	private final long ptr;
 	private static native void freeMPR( long ptr );
-	private void freeMPR(){
-		System.out.println( "This MPR object is being deleted..." );	// TODO <<<<<<<<<<<<<<<<<<<<<
-		try{
-			BufferedWriter writer = new BufferedWriter( new FileWriter( "MPRoutFile.txt", true ) );
-			writer.append( '\n' );
-			writer.append( "This MPR object is being deleted..." );
-			writer.close();
-		}
-		catch( Exception e ){}
-		freeMPR( ptr );
-	}
-	//------------------------------------------------------------------------------------------------------------------
-	private static class MPRPhantomReference extends PhantomReference<MPR> {
-		private WeakReference<MPR> mprRef;
-		public MPRPhantomReference( MPR referent, ReferenceQueue<? super MPR> q ){
-			super( referent, q );
-			this.mprRef = new WeakReference<>( referent );
-		}
-		@Override
-		public void clear(){
-			System.out.println( "MPR clearing ..." );	// TODO <<<<<<<<<<<<<<<<<<<<<
-			MPR mpr = mprRef.get();
-			if( mpr != null ){
-				mpr.freeMPR();
-			}
-			super.clear();
-		}
-		/*public void finalizeResources(){
-			System.out.println( "MPR clearing finalizeResources ..." );	// TODO <<<<<<<<<<<<<<<<<<<<<
-			MPR mpr = mprRef.get();
-			if( mpr != null ){
-				mpr.freeMPR();
-			}
-		}*/
-	}
-	private static ReferenceQueue<MPR> referenceQueue = new ReferenceQueue<>();
-	private MPRPhantomReference phantomReference;
-	private void initPhantom(){ this.phantomReference = new MPRPhantomReference( this, referenceQueue ); }
-	/*public static void cleanAllPhantomReferences(){
-		Reference<?> referenceFromQueue;
-		while( (referenceFromQueue = referenceQueue.poll()) != null ){
-			//((MPRPhantomReference)referenceFromQueue).finalizeResources();
-			referenceFromQueue.clear();
-		}
-	}*/
 	// Constructors ----------------------------------------------------------------------------------------------------
-	public MPR(){
-		ptr = initConstant( 0 );	// ZERO
-		initPhantom();
-	}
-	private MPR( int cte, boolean init ){
-		ptr = initConstant( cte );
-		initPhantom();
-	}
 	private MPR( long ptr ){
 		this.ptr = ptr;
-		initPhantom();
+
+		state = new State( ptr );
+		cleanable = cleaner.register( this, state );
 	}
+	private MPR( int cte, boolean init ){ this( initConstant( cte ) ); }
+	private static native long initWithDouble( double value );
+	private static native long initWithLong( long value );
+	private static native long initWithString( String value );
+	private static native long initWithCopy( long ptr );
+	public static MPR valueOf( double value ){ return new MPR( initWithDouble( value ) ); }
+	public static MPR valueOf( long value ){ return new MPR( initWithLong( value ) ); }
+	public static MPR valueOf( String value ){ return new MPR( initWithString( value ) ); }
+	public static MPR valueOf( MPR value ){ return new MPR( initWithCopy( value.ptr ) ); }	// Copy
 
 	private static native String toStr( long ptr, int prec );
 	@Override
@@ -98,23 +79,23 @@ public class MPR extends Number implements Comparable<MPR> {
 	}
 
 	// Number methods --------------------------------------------------------------------------------------------------
-	private static native long getAsLong( long ptr );
-	private static native double getAsDouble( long ptr );
+	private static native long toLong( long ptr );
+	private static native double toDouble( long ptr );
 	@Override
-	public int intValue(){ return (int)getAsLong( ptr ); }
+	public int intValue(){ return (int)toLong( ptr ); }
 
 	@Override
-	public long longValue(){ return getAsLong( ptr ); }
+	public long longValue(){ return toLong( ptr ); }
 
 	@Override
-	public float floatValue(){ return (float)getAsDouble( ptr ); }
+	public float floatValue(){ return (float)toDouble( ptr ); }
 
 	@Override
-	public double doubleValue(){ return getAsDouble( ptr ); }
+	public double doubleValue(){ return toDouble( ptr ); }
 	//------------------------------------------------------------------------------------------------------------------
 	@Override
 	public int compareTo( MPR o ){
-		return 0;	// TODO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		return 0;	// TODO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	}
 
 	// Fast access functions: + - * / ----------------------------------------------------------------------------------
