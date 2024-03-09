@@ -7,3 +7,5 @@ There is another implementation for Java:
   
 And for .NET: https://machinecognitis.github.io/Math.Mpfr.Native/html/0b5248b5-b205-46b1-13fd-9f42922b22bd.htm
 
+
+IMPORTANT: no test have been done yet. Use it at your own risk.
