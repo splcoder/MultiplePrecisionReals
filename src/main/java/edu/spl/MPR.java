@@ -98,28 +98,20 @@ public class MPR extends Number implements Comparable<MPR> {
 	}
 
 	// Number methods --------------------------------------------------------------------------------------------------
+	private static native long getAsLong( long ptr );
+	private static native double getAsDouble( long ptr );
 	@Override
-	public int intValue(){
-		return 0;
-	}
-
-	@Override
-	public long longValue(){
-		return 0;
-	}
+	public int intValue(){ return (int)getAsLong( ptr ); }
 
 	@Override
-	public float floatValue(){
-		return 0;
-	}
+	public long longValue(){ return getAsLong( ptr ); }
 
 	@Override
-	public double doubleValue(){
-		return 0;
-	}
+	public float floatValue(){ return (float)getAsDouble( ptr ); }
 
-
-
+	@Override
+	public double doubleValue(){ return getAsDouble( ptr ); }
+	//------------------------------------------------------------------------------------------------------------------
 	@Override
 	public int compareTo( MPR o ){
 		return 0;	// TODO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

@@ -24,7 +24,9 @@ public class Main {
 		System.out.println( "Wait some seconds..." );
 
 		MPR myOne = MPR.ONE;
-		System.out.println( "UNO: " + myOne );
+		double dOne = myOne.doubleValue();
+		long lOne = myOne.longValue();
+		System.out.println( "UNO: " + myOne + ", double: " + dOne + ", long: " + lOne );
 
 		//waitSeconds( 10 );
 

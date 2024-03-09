@@ -28,10 +28,20 @@ Java_edu_spl_MPR_initConstant( JNIEnv *env, jobject obj, jint cte ){
 
 JNIEXPORT jstring JNICALL
 Java_edu_spl_MPR_toStr( JNIEnv *env, jobject obj, jlong ptr, jint prec ){
-	mpreal *v = (mpreal*)ptr;
+	//mpreal *v = (mpreal*)ptr;
 	//std::string str = v->toString();
 	//return env->NewStringUTF( str.c_str() );
-	return env->NewStringUTF( v->toString().c_str() );	// TODO format <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	return env->NewStringUTF( ((mpreal*)ptr)->toString().c_str() );	// TODO format <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+}
+
+JNIEXPORT jlong JNICALL
+Java_edu_spl_MPR_getAsLong( JNIEnv *env, jobject obj, jlong ptr ){
+	return (int64_t)*((mpreal*)ptr);
+}
+
+JNIEXPORT jdouble JNICALL
+Java_edu_spl_MPR_getAsDouble( JNIEnv *env, jobject obj, jlong ptr ){
+	return (double)*((mpreal*)ptr);
 }
 
 /*
