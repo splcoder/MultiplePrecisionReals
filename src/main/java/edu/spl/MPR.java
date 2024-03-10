@@ -1,6 +1,9 @@
 package edu.spl;
 
 import java.lang.ref.Cleaner;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Multiple Precision in Reals
@@ -71,12 +74,20 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 	public static MPR valueOf( long value ){ return new MPR( initWithLong( value ) ); }
 	public static MPR valueOf( String value ){ return new MPR( initWithString( value ) ); }
 	public static MPR valueOf( MPR value ){ return new MPR( initWithCopy( value.ptr ) ); }	// Copy
-
-	private static native String toStr( long ptr, int prec );
-	@Override
-	public String toString(){
-		return toStr( this.ptr, DIGITS_PRECISION );
+	public static List<MPR> convert( Collection<Double> values ){
+		List<MPR> ret = new ArrayList<>( values.size() );
+		for( double v : values )	ret.add( MPR.valueOf( v ) );
+		return ret;
 	}
+	public static List<MPR> convert( List<String> values ){
+		List<MPR> ret = new ArrayList<>( values.size() );
+		for( String v : values )	ret.add( MPR.valueOf( v ) );
+		return ret;
+	}
+	private static native long random( int seed );
+	public static MPR randomSeed( int seed ){ return new MPR( random( seed ) ); }
+	public static MPR randomSeed(){ return new MPR( random( (int)System.currentTimeMillis() ) ); }
+	public static MPR random(){ return new MPR( random( 0 ) ); }
 
 	// Number methods --------------------------------------------------------------------------------------------------
 	private static native long toLong( long ptr );
@@ -93,10 +104,44 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 	@Override
 	public double doubleValue(){ return toDouble( ptr ); }
 	//------------------------------------------------------------------------------------------------------------------
+	private static native String toStr( long ptr, int prec );
+	@Override
+	public String toString(){ return toStr( this.ptr, DIGITS_PRECISION ); }
+	public String toString( int prec ){ return toStr( this.ptr, prec ); }
+	private static native boolean areEquals( long lPtr, long rPtr );
+	@Override
+	public boolean equals( Object o ){
+		if( ! (o instanceof MPR) )	return false;
+		if( this == o )	return true;
+		MPR r = (MPR)o;
+		return areEquals( this.ptr, r.ptr );		// Check exact
+	}
+	private static native int compare( long lPtr, long rPtr );
 	@Override
 	public int compareTo( MPR o ){
-		return 0;	// TODO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		if( o == null )	return 1;
+		return compare( this.ptr, o.ptr );
 	}
+	@Override
+	public int hashCode(){
+		int hash = 7;
+		hash = 31 * hash + Long.hashCode( ptr );
+		hash = 31 * hash + Long.hashCode( ptr );
+		return hash;
+	}
+	// Save to file / Load from file -----------------------------------------------------------------------------------
+	// TODO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+	// Basic functions -------------------------------------------------------------------------------------------------
+	// TODO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	/*public boolean isNan(){ return this.equals( R.NAN ); }
+	public boolean isInf(){ return this.equals( R.INF_P ) || this.equals( R.INF_N ); }
+	public boolean isInfP(){ return this.equals( R.INF_P ); }
+	public boolean isInfN(){ return this.equals( R.INF_N ); }
+	public boolean isFin(){ return ! (this.equals( R.NAN ) || this.equals( R.INF_P ) || this.equals( R.INF_N )); }
+	public R neg(){ return this.mul( -1 ); }
+	public R sqr(){ return this.mul( this ); }
+	*/
 
 	// Fast access functions: + - * / ----------------------------------------------------------------------------------
 	private static native long operation( long lPtr, long rPtr, int ope );
@@ -109,4 +154,7 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 	public MPR mul( double v ){ return new MPR( operation2( this.ptr, v, 2 ) ); }
 	public MPR div( MPR v ){ return new MPR( operation( this.ptr, v.ptr, 3 ) ); }
 	public MPR div( double v ){ return new MPR( operation2( this.ptr, v, 3 ) ); }
+
+	// Addition, Subtraction, Multiplication, Division -----------------------------------------------------------------
+
 }

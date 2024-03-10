@@ -18,10 +18,12 @@ JNIEXPORT jlong		JNICALL Java_edu_spl_MPR_initWithDouble( JNIEnv *env, jobject o
 JNIEXPORT jlong		JNICALL Java_edu_spl_MPR_initWithLong( JNIEnv *env, jobject obj, jlong value );
 JNIEXPORT jlong		JNICALL Java_edu_spl_MPR_initWithString( JNIEnv *env, jobject obj, jstring value );
 JNIEXPORT jlong		JNICALL Java_edu_spl_MPR_initWithCopy( JNIEnv *env, jobject obj, jlong ptr );
-
-JNIEXPORT jstring	JNICALL Java_edu_spl_MPR_toStr( JNIEnv *env, jobject obj, jlong ptr, jint prec );
+JNIEXPORT jlong		JNICALL Java_edu_spl_MPR_random( JNIEnv *env, jobject obj, jint seed );
 JNIEXPORT jlong		JNICALL Java_edu_spl_MPR_getAsLong( JNIEnv *env, jobject obj, jlong ptr );
 JNIEXPORT jdouble	JNICALL Java_edu_spl_MPR_getAsDouble( JNIEnv *env, jobject obj, jlong ptr );
+JNIEXPORT jstring	JNICALL Java_edu_spl_MPR_toStr( JNIEnv *env, jobject obj, jlong ptr, jint prec );
+JNIEXPORT jboolean	JNICALL Java_edu_spl_MPR_areEquals( JNIEnv *env, jobject obj, jlong lPtr, jlong rPtr );
+JNIEXPORT jint		JNICALL Java_edu_spl_MPR_compare( JNIEnv *env, jobject obj, jlong lPtr, jlong rPtr );
 
 JNIEXPORT jlong		JNICALL Java_edu_spl_MPR_operation( JNIEnv *env, jobject obj, jlong lPtr, jlong rPtr, jint ope );
 JNIEXPORT jlong		JNICALL Java_edu_spl_MPR_operation2( JNIEnv *env, jobject obj, jlong lPtr, jdouble r, jint ope );

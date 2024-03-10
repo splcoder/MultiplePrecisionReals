@@ -57,9 +57,9 @@ Java_edu_spl_MPR_initWithCopy( JNIEnv *env, jobject obj, jlong ptr ){
 	return MPRF::getMemDirection( *((mpreal*)ptr) + 0 );
 }
 
-JNIEXPORT jstring JNICALL
-Java_edu_spl_MPR_toStr( JNIEnv *env, jobject obj, jlong ptr, jint prec ){
-	return env->NewStringUTF( ((mpreal*)ptr)->toString().c_str() );	// TODO format <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+JNIEXPORT jlong JNICALL
+Java_edu_spl_MPR_random( JNIEnv *env, jobject obj, jint seed ){
+	return MPRF::getMemDirection( mpfr::random( seed ) );
 }
 
 JNIEXPORT jlong JNICALL
@@ -70,6 +70,24 @@ Java_edu_spl_MPR_toLong( JNIEnv *env, jobject obj, jlong ptr ){
 JNIEXPORT jdouble JNICALL
 Java_edu_spl_MPR_toDouble( JNIEnv *env, jobject obj, jlong ptr ){
 	return (double)*((mpreal*)ptr);
+}
+
+JNIEXPORT jstring JNICALL
+Java_edu_spl_MPR_toStr( JNIEnv *env, jobject obj, jlong ptr, jint prec ){
+	return env->NewStringUTF( ((mpreal*)ptr)->toString().c_str() );	// TODO format <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+}
+
+JNIEXPORT jboolean JNICALL
+Java_edu_spl_MPR_areEquals( JNIEnv *env, jobject obj, jlong lPtr, jlong rPtr ){
+	return *((mpreal*)lPtr) == *((mpreal*)rPtr);
+}
+
+JNIEXPORT jint JNICALL
+Java_edu_spl_MPR_compare( JNIEnv *env, jobject obj, jlong lPtr, jlong rPtr ){
+	mpreal dif = *((mpreal*)lPtr) - *((mpreal*)rPtr);
+	if( dif < 0 )	return -1;
+	if( dif > 0 )	return 1;
+	return 0;
 }
 
 /*	TODO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
