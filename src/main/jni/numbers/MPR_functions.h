@@ -16,6 +16,16 @@ COMPILER:
 	3rd libgmp.a
 */
 
+//----------------------------------------------------------------------------------------------------------------------
+// You can increase the speed by commenting the next line, but it might be crazy
+# define USE_HELMET_FOR_MPR
+
+#ifdef USE_HELMET_FOR_MPR
+	#include <map>
+	std::map<int64_t, std::unique_ptr<mpreal>> map_for_mpr;
+#endif
+//----------------------------------------------------------------------------------------------------------------------
+
 // MPR Functions
 class MPRF {
 private:
@@ -34,12 +44,22 @@ private:
 public:
 	static int64_t getMemDirection( const mpreal &value ){
 		std::unique_ptr<mpreal> uptr = std::make_unique<mpreal>( std::move( value ) );
-		return (int64_t)uptr.release();
+		#ifdef USE_HELMET_FOR_MPR
+			int64_t n_ptr = (int64_t)uptr.get();
+			map_for_mpr[ n_ptr ] = std::move( uptr );
+			return n_ptr;
+		#else
+			return (int64_t)uptr.release();
+		#endif
 	}
 	static void freeMemDirection( const int64_t p_dir ){
-		mpreal* p = (mpreal*)p_dir;
-		delete p;
-		p = nullptr;
+		#ifdef USE_HELMET_FOR_MPR
+			map_for_mpr.erase( p_dir );
+    	#else
+    		mpreal* p = (mpreal*)p_dir;
+            delete p;
+            p = nullptr;
+    	#endif
 	}
 	static int64_t operation( const int64_t lPtr, const int64_t rPtr, int ope ){
 		int64_t res = 0;
