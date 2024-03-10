@@ -142,9 +142,6 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 	public boolean isZero(){ return check( ptr, 5 ); }
 	public boolean isInt(){ return check( ptr, 6 ); }
 	public boolean isNeg(){ return check( ptr, 7 ); }
-	// TODO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	//public R neg(){ return this.mul( -1 ); }
-	//public R sqr(){ return this.mul( this ); }
 
 	// Fast access functions: + - * / ----------------------------------------------------------------------------------
 	private static native long operation( long lPtr, long rPtr, int ope );
@@ -157,6 +154,9 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 	public MPR mul( double v ){ return new MPR( operation2( this.ptr, v, 2 ) ); }
 	public MPR div( MPR v ){ return new MPR( operation( this.ptr, v.ptr, 3 ) ); }
 	public MPR div( double v ){ return new MPR( operation2( this.ptr, v, 3 ) ); }
+	// TODO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	//public R neg(){ return this.mul( -1 ); }
+	//public R sqr(){ return this.mul( this ); }
 
 	// Addition, Subtraction, Multiplication, Division -----------------------------------------------------------------
 

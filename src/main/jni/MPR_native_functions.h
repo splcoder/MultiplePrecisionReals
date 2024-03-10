@@ -24,6 +24,7 @@ JNIEXPORT jdouble	JNICALL Java_edu_spl_MPR_getAsDouble( JNIEnv *env, jobject obj
 JNIEXPORT jstring	JNICALL Java_edu_spl_MPR_toStr( JNIEnv *env, jobject obj, jlong ptr, jint prec );
 JNIEXPORT jboolean	JNICALL Java_edu_spl_MPR_areEquals( JNIEnv *env, jobject obj, jlong lPtr, jlong rPtr );
 JNIEXPORT jint		JNICALL Java_edu_spl_MPR_compare( JNIEnv *env, jobject obj, jlong lPtr, jlong rPtr );
+JNIEXPORT jboolean	JNICALL Java_edu_spl_MPR_check( JNIEnv *env, jobject obj, jlong ptr, jint ope );
 
 JNIEXPORT jlong		JNICALL Java_edu_spl_MPR_operation( JNIEnv *env, jobject obj, jlong lPtr, jlong rPtr, jint ope );
 JNIEXPORT jlong		JNICALL Java_edu_spl_MPR_operation2( JNIEnv *env, jobject obj, jlong lPtr, jdouble r, jint ope );
