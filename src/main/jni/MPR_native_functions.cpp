@@ -84,20 +84,20 @@ Java_edu_spl_MPR_areEquals( JNIEnv *env, jobject obj, jlong lPtr, jlong rPtr ){
 
 JNIEXPORT jint JNICALL
 Java_edu_spl_MPR_compare( JNIEnv *env, jobject obj, jlong lPtr, jlong rPtr ){
-	return mpfr::sgn( *((mpreal*)lPtr) - *((mpreal*)rPtr) );
+	return sgn( *((mpreal*)lPtr) - *((mpreal*)rPtr) );
 }
 
 JNIEXPORT jboolean JNICALL
 Java_edu_spl_MPR_check( JNIEnv *env, jobject obj, jlong ptr, jint ope ){
 	switch( ope ){
-		case 0: return mpfr::isnan( *((mpreal*)ptr) );
-		case 1: return mpfr::isinf( *((mpreal*)ptr) );
-		case 2: return mpfr::isinf( *((mpreal*)ptr) ) && (mpfr::sgn( *((mpreal*)ptr) ) > 0);
-		case 3: return mpfr::isinf( *((mpreal*)ptr) ) && (mpfr::sgn( *((mpreal*)ptr) ) < 0);
-		case 4: return mpfr::isfinite( *((mpreal*)ptr) );
-		case 5: return mpfr::iszero( *((mpreal*)ptr) );
-		case 6: return mpfr::isint( *((mpreal*)ptr) );
-		case 7: return mpfr::sgn( *((mpreal*)ptr) ) < 0;
+		case 0: return isnan( *((mpreal*)ptr) );
+		case 1: return isinf( *((mpreal*)ptr) );
+		case 2: return isinf( *((mpreal*)ptr) ) && (sgn( *((mpreal*)ptr) ) > 0);
+		case 3: return isinf( *((mpreal*)ptr) ) && (sgn( *((mpreal*)ptr) ) < 0);
+		case 4: return isfinite( *((mpreal*)ptr) );
+		case 5: return iszero( *((mpreal*)ptr) );
+		case 6: return isint( *((mpreal*)ptr) );
+		case 7: return sgn( *((mpreal*)ptr) ) < 0;
 	}
 }
 
@@ -139,8 +139,23 @@ Java_edu_spl_MPR_operation( JNIEnv *env, jobject obj, jlong lPtr, jlong rPtr, ji
 }
 
 JNIEXPORT jlong JNICALL
-Java_edu_spl_MPR_operation2( JNIEnv *env, jobject obj, jlong lPtr, jdouble r, jint ope ){
-	return MPRF::operation2( lPtr, r, ope );
+Java_edu_spl_MPR_operation2( JNIEnv *env, jobject obj, jlong lPtr, jdouble right, jint ope ){
+	return MPRF::operation2( lPtr, right, ope );
+}
+
+JNIEXPORT jlong JNICALL
+Java_edu_spl_MPR_operation1( JNIEnv *env, jobject obj, jlong ptr, jint ope ){
+	return MPRF::operation1( ptr, ope );
+}
+
+JNIEXPORT jlong JNICALL
+Java_edu_spl_MPR_operation3( JNIEnv *env, jobject obj, jdouble left, jlong rPtr, jint ope ){
+	return MPRF::operation3( left, rPtr, ope );
+}
+
+JNIEXPORT jlong JNICALL
+Java_edu_spl_MPR_operation4( JNIEnv *env, jobject obj, jdouble left, jdouble right, jint ope ){
+	return MPRF::operation4( left, right, ope );
 }
 
 #ifdef __cplusplus

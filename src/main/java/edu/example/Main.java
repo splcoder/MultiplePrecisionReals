@@ -10,6 +10,9 @@ public class Main {
 			long lOne = myOne.longValue();
 			System.out.println( "PI: " + myOne + ", double: " + dOne + ", long: " + lOne );
 			System.out.println( "< 0 ?: " + myOne.isNeg() );
+
+			MPR pi2 = myOne.sqr();
+			System.out.println( "PI^2: " + pi2 + ", nan ?: " + pi2.isNan() + ", inf ?: " + pi2.isInfP() );
 		}
 		MPR rand = MPR.randomSeed();
 		System.out.println( rand );

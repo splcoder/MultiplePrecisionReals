@@ -7,6 +7,10 @@ import java.util.List;
 
 /**
  * Multiple Precision in Reals
+ * https://www.mpfr.org/mpfr-current/mpfr.html
+ * https://github.com/advanpix/mpreal
+ *
+ * TODO https://github.com/JuliaLang/julia/issues/35796 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
  *
  * See: https://www.baeldung.com/java-destructor
  * 		https://openjdk.org/jeps/421
@@ -154,10 +158,27 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 	public MPR mul( double v ){ return new MPR( operation2( this.ptr, v, 2 ) ); }
 	public MPR div( MPR v ){ return new MPR( operation( this.ptr, v.ptr, 3 ) ); }
 	public MPR div( double v ){ return new MPR( operation2( this.ptr, v, 3 ) ); }
-	// TODO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	//public R neg(){ return this.mul( -1 ); }
-	//public R sqr(){ return this.mul( this ); }
+	private static native long operation1( long ptr, int ope );
+	public MPR neg(){ return new MPR( operation1( ptr, 0 ) ); }
+	public MPR sqr(){ return new MPR( operation1( ptr, 1 ) ); }
 
 	// Addition, Subtraction, Multiplication, Division -----------------------------------------------------------------
-
+	private static native long operation3( double left, long rPtr, int ope );
+	private static native long operation4( double left, double right, int ope );
+	public static MPR add( MPR l, MPR r ){ return new MPR( operation( l.ptr, r.ptr, 0 ) ); }
+	public static MPR add( MPR l, double r ){ return new MPR( operation2( l.ptr, r, 0 ) ); }
+	public static MPR add( double l, MPR r ){ return new MPR( operation3( l, r.ptr, 0 ) ); }
+	public static MPR add( double l, double r ){ return new MPR( operation4( l, r,  0 ) ); }
+	public static MPR sub( MPR l, MPR r ){ return new MPR( operation( l.ptr, r.ptr, 1 ) ); }
+	public static MPR sub( MPR l, double r ){ return new MPR( operation2( l.ptr, r, 1 ) ); }
+	public static MPR sub( double l, MPR r ){ return new MPR( operation3( l, r.ptr, 1 ) ); }
+	public static MPR sub( double l, double r ){ return new MPR( operation4( l, r,  1 ) ); }
+	public static MPR mul( MPR l, MPR r ){ return new MPR( operation( l.ptr, r.ptr, 2 ) ); }
+	public static MPR mul( MPR l, double r ){ return new MPR( operation2( l.ptr, r, 2 ) ); }
+	public static MPR mul( double l, MPR r ){ return new MPR( operation3( l, r.ptr, 2 ) ); }
+	public static MPR mul( double l, double r ){ return new MPR( operation4( l, r,  2 ) ); }
+	public static MPR div( MPR l, MPR r ){ return new MPR( operation( l.ptr, r.ptr, 3 ) ); }
+	public static MPR div( MPR l, double r ){ return new MPR( operation2( l.ptr, r, 3 ) ); }
+	public static MPR div( double l, MPR r ){ return new MPR( operation3( l, r.ptr, 3 ) ); }
+	public static MPR div( double l, double r ){ return new MPR( operation4( l, r,  3 ) ); }
 }

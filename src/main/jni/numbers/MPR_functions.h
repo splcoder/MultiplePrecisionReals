@@ -68,11 +68,31 @@ public:
 		left = nullptr; right = nullptr;
 		return res;
 	}
-	static int64_t operation2( const int64_t lPtr, const double r, int ope ){
+	static int64_t operation2( const int64_t lPtr, const double ri, int ope ){
 		int64_t res = 0;
-		mpreal *left = (mpreal*)lPtr, right = r;
+		mpreal *left = (mpreal*)lPtr, right = ri;
 		MPRF::exeOperation( res, ope, *left, right );
 		left = nullptr;
+		return res;
+	}
+	static int64_t operation1( const int64_t ptr, int ope ){
+		switch( ope ){
+			case 0: return getMemDirection( - *((mpreal*)ptr) );
+			case 1: return getMemDirection( sqr( *((mpreal*)ptr) ) );
+		}
+		return 0;	// nullptr
+	}
+	static int64_t operation3( const double le, const int64_t rPtr, int ope ){
+		int64_t res = 0;
+		mpreal left = le, *right = (mpreal*)rPtr;
+		MPRF::exeOperation( res, ope, left, *right );
+		right = nullptr;
+		return res;
+	}
+	static int64_t operation4( const double le, const double ri, int ope ){
+		int64_t res = 0;
+		mpreal left = le, right = ri;
+		MPRF::exeOperation( res, ope, left, right );
 		return res;
 	}
 };
