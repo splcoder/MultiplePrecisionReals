@@ -84,10 +84,21 @@ Java_edu_spl_MPR_areEquals( JNIEnv *env, jobject obj, jlong lPtr, jlong rPtr ){
 
 JNIEXPORT jint JNICALL
 Java_edu_spl_MPR_compare( JNIEnv *env, jobject obj, jlong lPtr, jlong rPtr ){
-	mpreal dif = *((mpreal*)lPtr) - *((mpreal*)rPtr);
-	if( dif < 0 )	return -1;
-	if( dif > 0 )	return 1;
-	return 0;
+	return mpfr::sgn( *((mpreal*)lPtr) - *((mpreal*)rPtr) );
+}
+
+JNIEXPORT jboolean JNICALL
+Java_edu_spl_MPR_check( JNIEnv *env, jobject obj, jlong ptr, jint ope ){
+	switch( ope ){
+		case 0: return mpfr::isnan( *((mpreal*)ptr) );
+		case 1: return mpfr::isinf( *((mpreal*)ptr) );
+		case 2: return mpfr::isinf( *((mpreal*)ptr) ) && (mpfr::sgn( *((mpreal*)ptr) ) > 0);
+		case 3: return mpfr::isinf( *((mpreal*)ptr) ) && (mpfr::sgn( *((mpreal*)ptr) ) < 0);
+		case 4: return mpfr::isfinite( *((mpreal*)ptr) );
+		case 5: return mpfr::iszero( *((mpreal*)ptr) );
+		case 6: return mpfr::isint( *((mpreal*)ptr) );
+		case 7: return mpfr::sgn( *((mpreal*)ptr) ) < 0;
+	}
 }
 
 /*	TODO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

@@ -133,15 +133,18 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 	// TODO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 	// Basic functions -------------------------------------------------------------------------------------------------
+	private static native boolean check( long ptr, int ope );
+	public boolean isNan(){ return check( ptr, 0 ); }
+	public boolean isInf(){ return check( ptr, 1 ); }
+	public boolean isInfP(){ return check( ptr, 2 ); }
+	public boolean isInfN(){ return check( ptr, 3 ); }
+	public boolean isFin(){ return check( ptr, 4 ); }	// is finite
+	public boolean isZero(){ return check( ptr, 5 ); }
+	public boolean isInt(){ return check( ptr, 6 ); }
+	public boolean isNeg(){ return check( ptr, 7 ); }
 	// TODO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	/*public boolean isNan(){ return this.equals( R.NAN ); }
-	public boolean isInf(){ return this.equals( R.INF_P ) || this.equals( R.INF_N ); }
-	public boolean isInfP(){ return this.equals( R.INF_P ); }
-	public boolean isInfN(){ return this.equals( R.INF_N ); }
-	public boolean isFin(){ return ! (this.equals( R.NAN ) || this.equals( R.INF_P ) || this.equals( R.INF_N )); }
-	public R neg(){ return this.mul( -1 ); }
-	public R sqr(){ return this.mul( this ); }
-	*/
+	//public R neg(){ return this.mul( -1 ); }
+	//public R sqr(){ return this.mul( this ); }
 
 	// Fast access functions: + - * / ----------------------------------------------------------------------------------
 	private static native long operation( long lPtr, long rPtr, int ope );

@@ -9,6 +9,7 @@ public class Main {
 			double dOne = myOne.doubleValue();
 			long lOne = myOne.longValue();
 			System.out.println( "PI: " + myOne + ", double: " + dOne + ", long: " + lOne );
+			System.out.println( "< 0 ?: " + myOne.isNeg() );
 		}
 		MPR rand = MPR.randomSeed();
 		System.out.println( rand );
