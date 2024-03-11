@@ -149,6 +149,11 @@ Java_edu_spl_MPR_operation1( JNIEnv *env, jobject obj, jlong ptr, jint ope ){
 }
 
 JNIEXPORT jlong JNICALL
+Java_edu_spl_MPR_operation1Double( JNIEnv *env, jobject obj, jdouble value, jint ope ){
+	return MPRF::operation1Double( value, ope );
+}
+
+JNIEXPORT jlong JNICALL
 Java_edu_spl_MPR_operation3( JNIEnv *env, jobject obj, jdouble left, jlong rPtr, jint ope ){
 	return MPRF::operation3( left, rPtr, ope );
 }

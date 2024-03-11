@@ -159,26 +159,57 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 	public MPR div( MPR v ){ return new MPR( operation( this.ptr, v.ptr, 3 ) ); }
 	public MPR div( double v ){ return new MPR( operation2( this.ptr, v, 3 ) ); }
 	private static native long operation1( long ptr, int ope );
+	private static native long operation1Double( double value, int ope );
 	public MPR neg(){ return new MPR( operation1( ptr, 0 ) ); }
 	public MPR sqr(){ return new MPR( operation1( ptr, 1 ) ); }
 
 	// Addition, Subtraction, Multiplication, Division -----------------------------------------------------------------
 	private static native long operation3( double left, long rPtr, int ope );
 	private static native long operation4( double left, double right, int ope );
-	public static MPR add( MPR l, MPR r ){ return new MPR( operation( l.ptr, r.ptr, 0 ) ); }
-	public static MPR add( MPR l, double r ){ return new MPR( operation2( l.ptr, r, 0 ) ); }
-	public static MPR add( double l, MPR r ){ return new MPR( operation3( l, r.ptr, 0 ) ); }
-	public static MPR add( double l, double r ){ return new MPR( operation4( l, r,  0 ) ); }
-	public static MPR sub( MPR l, MPR r ){ return new MPR( operation( l.ptr, r.ptr, 1 ) ); }
-	public static MPR sub( MPR l, double r ){ return new MPR( operation2( l.ptr, r, 1 ) ); }
-	public static MPR sub( double l, MPR r ){ return new MPR( operation3( l, r.ptr, 1 ) ); }
-	public static MPR sub( double l, double r ){ return new MPR( operation4( l, r,  1 ) ); }
-	public static MPR mul( MPR l, MPR r ){ return new MPR( operation( l.ptr, r.ptr, 2 ) ); }
-	public static MPR mul( MPR l, double r ){ return new MPR( operation2( l.ptr, r, 2 ) ); }
-	public static MPR mul( double l, MPR r ){ return new MPR( operation3( l, r.ptr, 2 ) ); }
-	public static MPR mul( double l, double r ){ return new MPR( operation4( l, r,  2 ) ); }
-	public static MPR div( MPR l, MPR r ){ return new MPR( operation( l.ptr, r.ptr, 3 ) ); }
-	public static MPR div( MPR l, double r ){ return new MPR( operation2( l.ptr, r, 3 ) ); }
-	public static MPR div( double l, MPR r ){ return new MPR( operation3( l, r.ptr, 3 ) ); }
-	public static MPR div( double l, double r ){ return new MPR( operation4( l, r,  3 ) ); }
+	public static MPR add( MPR l, MPR r ){			return new MPR( operation( l.ptr, r.ptr, 0 ) ); }
+	public static MPR add( MPR l, double r ){		return new MPR( operation2( l.ptr, r,	 0 ) ); }
+	public static MPR add( double l, MPR r ){		return new MPR( operation3( l, r.ptr,	 0 ) ); }
+	public static MPR add( double l, double r ){	return new MPR( operation4( l, r,		 0 ) ); }
+	public static MPR sub( MPR l, MPR r ){			return new MPR( operation( l.ptr, r.ptr, 1 ) ); }
+	public static MPR sub( MPR l, double r ){		return new MPR( operation2( l.ptr, r,	 1 ) ); }
+	public static MPR sub( double l, MPR r ){		return new MPR( operation3( l, r.ptr,	 1 ) ); }
+	public static MPR sub( double l, double r ){	return new MPR( operation4( l, r,		 1 ) ); }
+	public static MPR mul( MPR l, MPR r ){			return new MPR( operation( l.ptr, r.ptr, 2 ) ); }
+	public static MPR mul( MPR l, double r ){		return new MPR( operation2( l.ptr, r,	 2 ) ); }
+	public static MPR mul( double l, MPR r ){		return new MPR( operation3( l, r.ptr,	 2 ) ); }
+	public static MPR mul( double l, double r ){	return new MPR( operation4( l, r,		 2 ) ); }
+	public static MPR div( MPR l, MPR r ){			return new MPR( operation( l.ptr, r.ptr, 3 ) ); }
+	public static MPR div( MPR l, double r ){		return new MPR( operation2( l.ptr, r,	 3 ) ); }
+	public static MPR div( double l, MPR r ){		return new MPR( operation3( l, r.ptr,	 3 ) ); }
+	public static MPR div( double l, double r ){	return new MPR( operation4( l, r,		 3 ) ); }
+
+	// Rounding functions ----------------------------------------------------------------------------------------------
+	public static MPR abs( MPR r ){					return new MPR( operation1( r.ptr,       2 ) ); }
+	public static MPR abs( double r ){				return new MPR( operation1Double( r,     2 ) ); }
+	public static MPR floor( MPR r ){				return new MPR( operation1( r.ptr,       3 ) ); }
+	public static MPR floor( double r ){			return new MPR( operation1Double( r,     3 ) ); }
+	public static MPR ceil( MPR r ){				return new MPR( operation1( r.ptr,       4 ) ); }
+	public static MPR ceil( double r ){				return new MPR( operation1Double( r,     4 ) ); }
+	public static MPR trunc( MPR r ){				return new MPR( operation1( r.ptr,       5 ) ); }
+	public static MPR trunc( double r ){			return new MPR( operation1Double( r,     5 ) ); }
+	public static MPR round( MPR r ){				return new MPR( operation1( r.ptr,       6 ) ); }
+	public static MPR round( double r ){			return new MPR( operation1Double( r,     6 ) ); }
+
+	// Power and Root functions ----------------------------------------------------------------------------------------
+	public static MPR hypot( MPR l, MPR r ){		return new MPR( operation( l.ptr, r.ptr, 4 ) ); }
+	public static MPR hypot( MPR l, double r ){		return new MPR( operation2( l.ptr, r,    4 ) ); }
+	public static MPR hypot( double l, MPR r ){		return new MPR( operation3( l, r.ptr,    4 ) ); }
+	public static MPR hypot( double l, double r ){	return new MPR( operation4( l, r,        4 ) ); }
+	public static MPR sqrt( MPR r ){				return new MPR( operation1( r.ptr,       7 ) ); }
+	public static MPR sqrt( double r ){				return new MPR( operation1Double( r,     7 ) ); }
+	public static MPR cbrt( MPR r ){				return new MPR( operation1( r.ptr,       8 ) ); }
+	public static MPR cbrt( double r ){				return new MPR( operation1Double( r,     8 ) ); }
+	// TODO root( MPR v, int r ), root( double v, int r )	<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	public static MPR pow( MPR l, MPR r ){			return new MPR( operation( l.ptr, r.ptr, 5 ) ); }
+	public static MPR pow( MPR l, double r ){		return new MPR( operation2( l.ptr, r,    5 ) ); }
+	public static MPR pow( double l, MPR r ){		return new MPR( operation3( l, r.ptr,    5 ) ); }
+	public static MPR pow( double l, double r ){	return new MPR( operation4( l, r,        5 ) ); }
+
+	// Logarithm and Exponential functions -----------------------------------------------------------------------------
+
 }

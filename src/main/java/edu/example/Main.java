@@ -8,7 +8,7 @@ public class Main {
 			MPR myOne = MPR.M_PI;
 			double dOne = myOne.doubleValue();
 			long lOne = myOne.longValue();
-			System.out.println( "PI: " + myOne + ", double: " + dOne + ", long: " + lOne );
+			System.out.println( "PI: " + myOne + ", double: " + dOne + ", long: " + lOne + ", round: " + MPR.round( myOne ) + ", ceil: " + MPR.ceil( myOne ) );
 			System.out.println( "< 0 ?: " + myOne.isNeg() );
 
 			MPR pi2 = myOne.sqr();

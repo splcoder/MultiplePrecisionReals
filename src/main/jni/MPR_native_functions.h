@@ -29,6 +29,7 @@ JNIEXPORT jboolean	JNICALL Java_edu_spl_MPR_check( JNIEnv *env, jobject obj, jlo
 JNIEXPORT jlong		JNICALL Java_edu_spl_MPR_operation( JNIEnv *env, jobject obj, jlong lPtr, jlong rPtr, jint ope );
 JNIEXPORT jlong		JNICALL Java_edu_spl_MPR_operation2( JNIEnv *env, jobject obj, jlong lPtr, jdouble right, jint ope );
 JNIEXPORT jlong		JNICALL Java_edu_spl_MPR_operation1( JNIEnv *env, jobject obj, jlong ptr, jint ope );
+JNIEXPORT jlong		JNICALL Java_edu_spl_MPR_operation1Double( JNIEnv *env, jobject obj, jdouble value, jint ope );
 JNIEXPORT jlong		JNICALL Java_edu_spl_MPR_operation3( JNIEnv *env, jobject obj, jdouble left, jlong rPtr, jint ope );
 JNIEXPORT jlong		JNICALL Java_edu_spl_MPR_operation4( JNIEnv *env, jobject obj, jdouble left, jdouble right, jint ope );
 

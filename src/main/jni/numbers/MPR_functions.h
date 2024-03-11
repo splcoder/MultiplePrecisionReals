@@ -37,9 +37,25 @@ private:
 			case 1: out = getMemDirection( left - right ); break;
 			case 2: out = getMemDirection( left * right ); break;
 			case 3: out = getMemDirection( left / right ); break;
+			case 4: out = getMemDirection( hypot( left, right ) ); break;
+			case 5: out = getMemDirection( pow( left, right ) ); break;
 			default: out = 0;	// nullptr (it never reachs this point)
 		}
 	}
+	static void exeOperationForOne( int64_t &out, int ope, const mpreal &value ){
+    		switch( ope ){
+    			case 0: out = getMemDirection( -value ); break;
+    			case 1: out = getMemDirection( sqr( value ) ); break;
+    			case 2: out = getMemDirection( fabs( value ) ); break;
+    			case 3: out = getMemDirection( floor( value ) ); break;
+    			case 4: out = getMemDirection( ceil( value ) ); break;
+    			case 5: out = getMemDirection( trunc( value ) ); break;
+    			case 6: out = getMemDirection( round( value ) ); break;
+    			case 7: out = getMemDirection( sqrt( value ) ); break;
+    			case 8: out = getMemDirection( cbrt( value ) ); break;
+    			default: out = 0;	// nullptr (it never reachs this point)
+    		}
+    	}
 
 public:
 	static int64_t getMemDirection( const mpreal &value ){
@@ -76,11 +92,16 @@ public:
 		return res;
 	}
 	static int64_t operation1( const int64_t ptr, int ope ){
-		switch( ope ){
-			case 0: return getMemDirection( - *((mpreal*)ptr) );
-			case 1: return getMemDirection( sqr( *((mpreal*)ptr) ) );
-		}
-		return 0;	// nullptr
+		int64_t res = 0;
+		mpreal *value = (mpreal*)ptr;
+		MPRF::exeOperationForOne( res, ope, *value );
+		value = nullptr;
+		return res;
+	}
+	static int64_t operation1Double( const double value, int ope ){
+		int64_t res = 0;
+		MPRF::exeOperationForOne( res, ope, (mpreal)value );
+		return res;
 	}
 	static int64_t operation3( const double le, const int64_t rPtr, int ope ){
 		int64_t res = 0;
