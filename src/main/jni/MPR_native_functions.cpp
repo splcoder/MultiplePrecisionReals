@@ -163,6 +163,44 @@ Java_edu_spl_MPR_operation4( JNIEnv *env, jobject obj, jdouble left, jdouble rig
 	return MPRF::operation4( left, right, ope );
 }
 
+void exeOperation1Arg2Out( mpreal &out1, mpreal &out2, jint ope, const mpreal &value ){
+	switch( ope ){
+		case 0: sin_cos( out1, out2, value );		break;
+        default: out1 = mpreal().setNan(); out2 = mpreal().setNan();
+	}
+}
+
+// Returns an array of 2 MPR values
+JNIEXPORT jlongArray JNICALL
+Java_edu_spl_MPR_operation7( JNIEnv *env, jobject obj, jlong ptr, jint ope ){
+	mpreal out1, out2, *value = (mpreal*)ptr;
+	exeOperation1Arg2Out( out1, out2, ope, *value );
+
+	int64_t first = MPRF::getMemDirection( out1 ), second = MPRF::getMemDirection( out2 );
+	jlong outCArray[] = { first, second };
+
+	// Convert the C's Native jlong[] to JNI jlongarray, and return
+	jlongArray outJNIArray = env->NewLongArray( 2 );			// allocate
+	if( NULL == outJNIArray )	return NULL;
+	env->SetLongArrayRegion( outJNIArray, 0 , 2, outCArray );	// copy
+	return outJNIArray;
+}
+
+JNIEXPORT jlongArray JNICALL
+Java_edu_spl_MPR_operation8( JNIEnv *env, jobject obj, jdouble val, jint ope ){
+	mpreal out1, out2, value( val );
+	exeOperation1Arg2Out( out1, out2, ope, value );
+
+	int64_t first = MPRF::getMemDirection( out1 ), second = MPRF::getMemDirection( out2 );
+	jlong outCArray[] = { first, second };
+
+	// Convert the C's Native jlong[] to JNI jlongarray, and return
+	jlongArray outJNIArray = env->NewLongArray( 2 );			// allocate
+	if( NULL == outJNIArray )	return NULL;
+	env->SetLongArrayRegion( outJNIArray, 0 , 2, outCArray );	// copy
+	return outJNIArray;
+}
+
 #ifdef __cplusplus
 }
 #endif

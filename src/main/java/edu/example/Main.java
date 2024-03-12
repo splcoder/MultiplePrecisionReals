@@ -20,6 +20,10 @@ public class Main {
 			rand = MPR.random();
 			System.out.println( rand );
 		}
+
+		MPR sc[] = MPR.sinCos( 1. );
+		System.out.println( "sin: " + sc[0] + ", cos: " + sc[1] );
+
 		System.out.println( "Saliendo..." );
 	}
 }

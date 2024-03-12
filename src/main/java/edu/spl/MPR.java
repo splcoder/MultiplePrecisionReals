@@ -211,5 +211,103 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 	public static MPR pow( double l, double r ){	return new MPR( operation4( l, r,        5 ) ); }
 
 	// Logarithm and Exponential functions -----------------------------------------------------------------------------
+	public static MPR exp( MPR r ){					return new MPR( operation1( r.ptr,       9 ) ); }
+	public static MPR exp( double r ){				return new MPR( operation1Double( r,     9 ) ); }
+	public static MPR exp2( MPR r ){				return new MPR( operation1( r.ptr,       10 ) ); }		// 2^x
+	public static MPR exp2( double r ){				return new MPR( operation1Double( r,     10 ) ); }
+	public static MPR exp10( MPR r ){				return new MPR( operation1( r.ptr,       11 ) ); }
+	public static MPR exp10( double r ){			return new MPR( operation1Double( r,     11 ) ); }
+	// For small magnitude values of x, expm1(x) may be more accurate than exp(x)-1.
+	public static MPR expm1( MPR r ){				return new MPR( operation1( r.ptr,       12 ) ); }
+	public static MPR expm1( double r ){			return new MPR( operation1Double( r,     12 ) ); }
+	public static MPR expW( MPR r ){				return new MPR( operation1( r.ptr,       13 ) ); }		// x*(e^x)
+	public static MPR expW( double r ){				return new MPR( operation1Double( r,     13 ) ); }
+	public static MPR ln( MPR r ){					return new MPR( operation1( r.ptr,       14 ) ); }
+	public static MPR ln( double r ){				return new MPR( operation1Double( r,     14 ) ); }
+	// For small magnitude values of x, ln1p(x) may be more accurate than ln(1+x)
+	public static MPR ln1p( MPR r ){				return new MPR( operation1( r.ptr,       15 ) ); }
+	public static MPR ln1p( double r ){				return new MPR( operation1Double( r,     15 ) ); }
+	public static MPR log2( MPR r ){				return new MPR( operation1( r.ptr,       16 ) ); }
+	public static MPR log2( double r ){				return new MPR( operation1Double( r,     16 ) ); }
+	public static MPR log10( MPR r ){				return new MPR( operation1( r.ptr,       17 ) ); }
+	public static MPR log10( double r ){			return new MPR( operation1Double( r,     17 ) ); }
+	// Log in base b = log(l)/log(b)
+	public static MPR logn( MPR l, MPR b ){			return new MPR( operation( l.ptr, b.ptr, 6 ) ); }
+	public static MPR logn( MPR l, double b ){		return new MPR( operation2( l.ptr, b,    6 ) ); }
+	public static MPR logn( double l, MPR b ){		return new MPR( operation3( l, b.ptr,    6 ) ); }
+	public static MPR logn( double l, double b ){	return new MPR( operation4( l, b,        6 ) ); }
 
+	// Trigonometric functions -----------------------------------------------------------------------------------------
+	public static MPR sin( MPR r ){					return new MPR( operation1( r.ptr,       18 ) ); }
+	public static MPR sin( double r ){				return new MPR( operation1Double( r,     18 ) ); }
+	public static MPR cos( MPR r ){					return new MPR( operation1( r.ptr,       19 ) ); }
+	public static MPR cos( double r ){				return new MPR( operation1Double( r,     19 ) ); }
+	public static MPR tan( MPR r ){					return new MPR( operation1( r.ptr,       20 ) ); }
+	public static MPR tan( double r ){				return new MPR( operation1Double( r,     20 ) ); }
+	public static MPR csc( MPR r ){					return new MPR( operation1( r.ptr,       21 ) ); }
+	public static MPR csc( double r ){				return new MPR( operation1Double( r,     21 ) ); }
+	public static MPR sec( MPR r ){					return new MPR( operation1( r.ptr,       22 ) ); }
+	public static MPR sec( double r ){				return new MPR( operation1Double( r,     22 ) ); }
+	public static MPR cot( MPR r ){					return new MPR( operation1( r.ptr,       23 ) ); }
+	public static MPR cot( double r ){				return new MPR( operation1Double( r,     23 ) ); }
+	private static native long[] operation7( long ptr, int ope );		// Returns an array of 2 R values
+	private static native long[] operation8( double value, int ope );	// Returns an array of 2 R values
+	public static MPR[] sinCos( MPR r ){
+		long[] v = operation7( r.ptr, 0 );
+		if( v == null )		throw new RuntimeException( "MPR -> the native array could not be allocated" );
+		return new MPR[]{ new MPR( v[0] ), new MPR( v[1] ) };
+	}
+	public static MPR[] sinCos( double r ){
+		long[] v = operation8( r, 0 );
+		if( v == null )		throw new RuntimeException( "MPR -> the native array could not be allocated" );
+		return new MPR[]{ new MPR( v[0] ), new MPR( v[1] ) };
+	}
+	public static MPR asin( MPR r ){				return new MPR( operation1( r.ptr,       24 ) ); }
+	public static MPR asin( double r ){				return new MPR( operation1Double( r,     24 ) ); }
+	public static MPR acos( MPR r ){				return new MPR( operation1( r.ptr,       25 ) ); }
+	public static MPR acos( double r ){				return new MPR( operation1Double( r,     25 ) ); }
+	public static MPR atan( MPR r ){				return new MPR( operation1( r.ptr,       26 ) ); }
+	public static MPR atan( double r ){				return new MPR( operation1Double( r,     26 ) ); }
+	public static MPR acsc( MPR r ){				return new MPR( operation1( r.ptr,       27 ) ); }
+	public static MPR acsc( double r ){				return new MPR( operation1Double( r,     27 ) ); }
+	public static MPR asec( MPR r ){				return new MPR( operation1( r.ptr,       28 ) ); }
+	public static MPR asec( double r ){				return new MPR( operation1Double( r,     28 ) ); }
+	public static MPR acot( MPR r ){				return new MPR( operation1( r.ptr,       29 ) ); }
+	public static MPR acot( double r ){				return new MPR( operation1Double( r,     29 ) ); }
+	public static MPR atan2( MPR l, MPR b ){		return new MPR( operation( l.ptr, b.ptr, 7 ) ); }
+	public static MPR atan2( MPR l, double b ){		return new MPR( operation2( l.ptr, b,    7 ) ); }
+	public static MPR atan2( double l, MPR b ){		return new MPR( operation3( l, b.ptr,    7 ) ); }
+	public static MPR atan2( double l, double b ){	return new MPR( operation4( l, b,        7 ) ); }
+
+	// Hyperbolic functions --------------------------------------------------------------------------------------------
+	public static MPR sinh( MPR r ){				return new MPR( operation1( r.ptr,       30 ) ); }
+	public static MPR sinh( double r ){				return new MPR( operation1Double( r,     30 ) ); }
+	public static MPR cosh( MPR r ){				return new MPR( operation1( r.ptr,       31 ) ); }
+	public static MPR cosh( double r ){				return new MPR( operation1Double( r,     31 ) ); }
+	public static MPR tanh( MPR r ){				return new MPR( operation1( r.ptr,       32 ) ); }
+	public static MPR tanh( double r ){				return new MPR( operation1Double( r,     32 ) ); }
+	public static MPR csch( MPR r ){				return new MPR( operation1( r.ptr,       33 ) ); }
+	public static MPR csch( double r ){				return new MPR( operation1Double( r,     33 ) ); }
+	public static MPR sech( MPR r ){				return new MPR( operation1( r.ptr,       34 ) ); }
+	public static MPR sech( double r ){				return new MPR( operation1Double( r,     34 ) ); }
+	public static MPR coth( MPR r ){				return new MPR( operation1( r.ptr,       35 ) ); }
+	public static MPR coth( double r ){				return new MPR( operation1Double( r,     35 ) ); }
+	public static MPR asinh( MPR r ){				return new MPR( operation1( r.ptr,       36 ) ); }
+	public static MPR asinh( double r ){			return new MPR( operation1Double( r,     36 ) ); }
+	public static MPR acosh( MPR r ){				return new MPR( operation1( r.ptr,       37 ) ); }
+	public static MPR acosh( double r ){			return new MPR( operation1Double( r,     37 ) ); }
+	public static MPR atanh( MPR r ){				return new MPR( operation1( r.ptr,       38 ) ); }
+	public static MPR atanh( double r ){			return new MPR( operation1Double( r,     38 ) ); }
+	public static MPR acsch( MPR r ){				return new MPR( operation1( r.ptr,       39 ) ); }
+	public static MPR acsch( double r ){			return new MPR( operation1Double( r,     39 ) ); }
+	public static MPR asech( MPR r ){				return new MPR( operation1( r.ptr,       40 ) ); }
+	public static MPR asech( double r ){			return new MPR( operation1Double( r,     40 ) ); }
+	public static MPR acoth( MPR r ){				return new MPR( operation1( r.ptr,       41 ) ); }
+	public static MPR acoth( double r ){			return new MPR( operation1Double( r,     41 ) ); }
+
+	// Mod, Max and Min functions --------------------------------------------------------------------------------------
+
+	// Bessel functions ------------------------------------------------------------------------------------------------
+	// Other functions -------------------------------------------------------------------------------------------------
+	// Stat functions --------------------------------------------------------------------------------------------------
 }
