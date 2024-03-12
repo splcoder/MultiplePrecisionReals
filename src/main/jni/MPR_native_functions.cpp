@@ -166,6 +166,7 @@ Java_edu_spl_MPR_operation6( JNIEnv *env, jobject obj, jdouble value, jint ope )
 void exeOperation1Arg2Out( mpreal &out1, mpreal &out2, jint ope, const mpreal &value ){
 	switch( ope ){
 		case 0: sin_cos( out1, out2, value );		break;
+		case 1: sinh_cosh( out1, out2, value );		break;
         default: out1 = mpreal().setNan(); out2 = mpreal().setNan();
 	}
 }

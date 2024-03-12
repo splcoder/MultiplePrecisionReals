@@ -146,6 +146,7 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 	public boolean isZero(){ return check( ptr, 5 ); }
 	public boolean isInt(){ return check( ptr, 6 ); }
 	public boolean isNeg(){ return check( ptr, 7 ); }
+	// TODO int sign <<<<<<<<<< sgn
 
 	// Fast access functions: + - * / ----------------------------------------------------------------------------------
 	private static native long operation( long lPtr, long rPtr, int ope );
@@ -292,6 +293,16 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 	public static MPR sech( double r ){				return new MPR( operation6( r,			 34 ) ); }
 	public static MPR coth( MPR r ){				return new MPR( operation5( r.ptr,       35 ) ); }
 	public static MPR coth( double r ){				return new MPR( operation6( r,			 35 ) ); }
+	public static MPR[] sinhCosh( MPR r ){
+		long[] v = operation7( r.ptr, 1 );
+		if( v == null )		throw new RuntimeException( "MPR -> the native array could not be allocated" );
+		return new MPR[]{ new MPR( v[0] ), new MPR( v[1] ) };
+	}
+	public static MPR[] sinhCosh( double r ){
+		long[] v = operation8( r, 1 );
+		if( v == null )		throw new RuntimeException( "MPR -> the native array could not be allocated" );
+		return new MPR[]{ new MPR( v[0] ), new MPR( v[1] ) };
+	}
 	public static MPR asinh( MPR r ){				return new MPR( operation5( r.ptr,       36 ) ); }
 	public static MPR asinh( double r ){			return new MPR( operation6( r,			 36 ) ); }
 	public static MPR acosh( MPR r ){				return new MPR( operation5( r.ptr,       37 ) ); }
