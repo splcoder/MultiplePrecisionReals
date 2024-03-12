@@ -144,16 +144,6 @@ Java_edu_spl_MPR_operation2( JNIEnv *env, jobject obj, jlong lPtr, jdouble right
 }
 
 JNIEXPORT jlong JNICALL
-Java_edu_spl_MPR_operation1( JNIEnv *env, jobject obj, jlong ptr, jint ope ){
-	return MPRF::operation1( ptr, ope );
-}
-
-JNIEXPORT jlong JNICALL
-Java_edu_spl_MPR_operation1Double( JNIEnv *env, jobject obj, jdouble value, jint ope ){
-	return MPRF::operation1Double( value, ope );
-}
-
-JNIEXPORT jlong JNICALL
 Java_edu_spl_MPR_operation3( JNIEnv *env, jobject obj, jdouble left, jlong rPtr, jint ope ){
 	return MPRF::operation3( left, rPtr, ope );
 }
@@ -161,6 +151,16 @@ Java_edu_spl_MPR_operation3( JNIEnv *env, jobject obj, jdouble left, jlong rPtr,
 JNIEXPORT jlong JNICALL
 Java_edu_spl_MPR_operation4( JNIEnv *env, jobject obj, jdouble left, jdouble right, jint ope ){
 	return MPRF::operation4( left, right, ope );
+}
+
+JNIEXPORT jlong JNICALL
+Java_edu_spl_MPR_operation5( JNIEnv *env, jobject obj, jlong ptr, jint ope ){
+	return MPRF::operation5( ptr, ope );
+}
+
+JNIEXPORT jlong JNICALL
+Java_edu_spl_MPR_operation6( JNIEnv *env, jobject obj, jdouble value, jint ope ){
+	return MPRF::operation6( value, ope );
 }
 
 void exeOperation1Arg2Out( mpreal &out1, mpreal &out2, jint ope, const mpreal &value ){

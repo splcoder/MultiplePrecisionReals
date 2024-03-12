@@ -126,18 +126,6 @@ public:
 		left = nullptr;
 		return res;
 	}
-	static int64_t operation1( const int64_t ptr, int ope ){
-		int64_t res = 0;
-		mpreal *value = (mpreal*)ptr;
-		MPRF::exeOperationForOne( res, ope, *value );
-		value = nullptr;
-		return res;
-	}
-	static int64_t operation1Double( const double value, int ope ){
-		int64_t res = 0;
-		MPRF::exeOperationForOne( res, ope, (mpreal)value );
-		return res;
-	}
 	static int64_t operation3( const double le, const int64_t rPtr, int ope ){
 		int64_t res = 0;
 		mpreal left( le ), *right = (mpreal*)rPtr;
@@ -149,6 +137,18 @@ public:
 		int64_t res = 0;
 		mpreal left( le ), right( ri );
 		MPRF::exeOperation( res, ope, left, right );
+		return res;
+	}
+	static int64_t operation5( const int64_t ptr, int ope ){
+		int64_t res = 0;
+		mpreal *value = (mpreal*)ptr;
+		MPRF::exeOperationForOne( res, ope, *value );
+		value = nullptr;
+		return res;
+	}
+	static int64_t operation6( const double value, int ope ){
+		int64_t res = 0;
+		MPRF::exeOperationForOne( res, ope, (mpreal)value );
 		return res;
 	}
 };
