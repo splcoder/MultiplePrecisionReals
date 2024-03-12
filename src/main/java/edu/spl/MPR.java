@@ -110,8 +110,8 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 	//------------------------------------------------------------------------------------------------------------------
 	private static native String toStr( long ptr, int prec );
 	@Override
-	public String toString(){ return toStr( this.ptr, DIGITS_PRECISION ); }
-	public String toString( int prec ){ return toStr( this.ptr, prec ); }	// TODO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	public String toString(){ return toStr( this.ptr, -1 ); }	// convert with the maximum available digits
+	public String toString( int prec ){ return toStr( this.ptr, (prec > DIGITS_PRECISION ? -1 : (prec < -1 ? -1 : prec)) ); }
 	private static native boolean areEquals( long lPtr, long rPtr );
 	@Override
 	public boolean equals( Object o ){
@@ -146,7 +146,6 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 	public boolean isZero(){ return check( ptr, 5 ); }
 	public boolean isInt(){ return check( ptr, 6 ); }
 	public boolean isNeg(){ return check( ptr, 7 ); }
-	// TODO int sign <<<<<<<<<< sgn
 
 	// Fast access functions: + - * / ----------------------------------------------------------------------------------
 	private static native long operation( long lPtr, long rPtr, int ope );
@@ -163,6 +162,7 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 	private static native long operation6( double value, int ope );
 	public MPR neg(){ return new MPR( operation5( ptr, 0 ) ); }
 	public MPR sqr(){ return new MPR( operation5( ptr, 1 ) ); }
+	//public int sign(){ return operation5( ptr, 1 ); }	// TODO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< sgn
 
 	// Addition, Subtraction, Multiplication, Division -----------------------------------------------------------------
 	private static native long operation3( double left, long rPtr, int ope );
@@ -317,7 +317,27 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 	public static MPR acoth( double r ){			return new MPR( operation6( r,			 41 ) ); }
 
 	// Mod, Max and Min functions --------------------------------------------------------------------------------------
-	// TODO por aquí
+	public static MPR max( MPR l, MPR b ){			return new MPR( operation( l.ptr, b.ptr, 8 ) ); }
+	public static MPR max( MPR l, double b ){		return new MPR( operation2( l.ptr, b,    8 ) ); }
+	public static MPR max( double l, MPR b ){		return new MPR( operation3( l, b.ptr,    8 ) ); }
+	public static MPR max( double l, double b ){	return new MPR( operation4( l, b,        8 ) ); }
+	public static MPR min( MPR l, MPR b ){			return new MPR( operation( l.ptr, b.ptr, 9 ) ); }
+	public static MPR min( MPR l, double b ){		return new MPR( operation2( l.ptr, b,    9 ) ); }
+	public static MPR min( double l, MPR b ){		return new MPR( operation3( l, b.ptr,    9 ) ); }
+	public static MPR min( double l, double b ){	return new MPR( operation4( l, b,        9 ) ); }
+	public static MPR fmod( MPR l, MPR b ){			return new MPR( operation( l.ptr, b.ptr, 10 ) ); }
+	public static MPR fmod( MPR l, double b ){		return new MPR( operation2( l.ptr, b,    10 ) ); }
+	public static MPR fmod( double l, MPR b ){		return new MPR( operation3( l, b.ptr,    10 ) ); }
+	public static MPR fmod( double l, double b ){	return new MPR( operation4( l, b,        10 ) ); }
+	public static MPR rem( MPR l, MPR b ){			return new MPR( operation( l.ptr, b.ptr, 11 ) ); }	// Remainder after division
+	public static MPR rem( MPR l, double b ){		return new MPR( operation2( l.ptr, b,    11 ) ); }
+	public static MPR rem( double l, MPR b ){		return new MPR( operation3( l, b.ptr,    11 ) ); }
+	public static MPR rem( double l, double b ){	return new MPR( operation4( l, b,        11 ) ); }
+	public static MPR mod( MPR l, MPR b ){			return new MPR( operation( l.ptr, b.ptr, 12 ) ); }	// Modulus after division
+	public static MPR mod( MPR l, double b ){		return new MPR( operation2( l.ptr, b,    12 ) ); }
+	public static MPR mod( double l, MPR b ){		return new MPR( operation3( l, b.ptr,    12 ) ); }
+	public static MPR mod( double l, double b ){	return new MPR( operation4( l, b,        12 ) ); }
+	// TODO modf // decompose the floating-point number: [fractpart, intpart]
 	// Bessel functions ------------------------------------------------------------------------------------------------
 	// Other functions -------------------------------------------------------------------------------------------------
 	// Stat functions --------------------------------------------------------------------------------------------------

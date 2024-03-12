@@ -74,7 +74,7 @@ Java_edu_spl_MPR_toDouble( JNIEnv *env, jobject obj, jlong ptr ){
 
 JNIEXPORT jstring JNICALL
 Java_edu_spl_MPR_toStr( JNIEnv *env, jobject obj, jlong ptr, jint prec ){
-	return env->NewStringUTF( ((mpreal*)ptr)->toString().c_str() );	// TODO format <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	return env->NewStringUTF( ((mpreal*)ptr)->toString( prec ).c_str() );
 }
 
 JNIEXPORT jboolean JNICALL

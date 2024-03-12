@@ -11,6 +11,9 @@ public class Main {
 			System.out.println( "PI: " + myOne + ", double: " + dOne + ", long: " + lOne + ", round: " + MPR.round( myOne ) + ", ceil: " + MPR.ceil( myOne ) );
 			System.out.println( "< 0 ?: " + myOne.isNeg() );
 
+			myOne = MPR.M_E;
+			System.out.println( "e = " + myOne );
+
 			MPR pi2 = myOne.sqr();
 			System.out.println( "PI^2: " + pi2 + ", nan ?: " + pi2.isNan() + ", inf ?: " + pi2.isInfP() );
 		}

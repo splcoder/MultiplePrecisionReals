@@ -33,15 +33,20 @@ private:
 
 	static void exeOperation( int64_t &out, int ope, const mpreal &left, const mpreal &right ){
 		switch( ope ){
-			case 0: out = getMemDirection( left + right );					break;
-			case 1: out = getMemDirection( left - right );					break;
-			case 2: out = getMemDirection( left * right );					break;
-			case 3: out = getMemDirection( left / right );					break;
-			case 4: out = getMemDirection( hypot( left, right ) );			break;
-			case 5: out = getMemDirection( pow( left, right ) );			break;
-			case 6: out = getMemDirection( log( left ) / log( right ) );	break;
-			case 7: out = getMemDirection( atan2( left, right ) );			break;
-			default: out = 0;	// nullptr (it never reachs this point)
+			case 0:		out = getMemDirection( left + right );					break;
+			case 1:		out = getMemDirection( left - right );					break;
+			case 2:		out = getMemDirection( left * right );					break;
+			case 3:		out = getMemDirection( left / right );					break;
+			case 4:		out = getMemDirection( hypot( left, right ) );			break;
+			case 5:		out = getMemDirection( pow( left, right ) );			break;
+			case 6:		out = getMemDirection( log( left ) / log( right ) );	break;
+			case 7:		out = getMemDirection( atan2( left, right ) );			break;
+			case 8:		out = getMemDirection( fmax( left, right ) );			break;
+			case 9:		out = getMemDirection( fmin( left, right ) );			break;
+			case 10:	out = getMemDirection( fmod( left, right ) );			break;
+			case 11:	out = getMemDirection( rem( left, right ) );			break;
+			case 12:	out = getMemDirection( mod( left, right ) );			break;
+			default:	out = 0;	// nullptr (it never reachs this point)
 		}
 	}
 	static void exeOperationForOne( int64_t &out, int ope, const mpreal &value ){
