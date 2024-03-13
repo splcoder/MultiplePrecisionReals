@@ -163,7 +163,8 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 	private static native long operation6( double value, int ope );
 	public MPR neg(){ return new MPR( operation5( ptr, 0 ) ); }
 	public MPR sqr(){ return new MPR( operation5( ptr, 1 ) ); }
-	//public int sign(){ return operation5( ptr, 1 ); }	// TODO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< sgn
+	private static native int getSign( long ptr );
+	public int sign(){ return getSign( ptr ); }
 
 	// Addition, Subtraction, Multiplication, Division -----------------------------------------------------------------
 	private static native long operation3( double left, long rPtr, int ope );
@@ -389,62 +390,62 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 	public static MPR li2( MPR r ){					return new MPR( operation5( r.ptr,       55 ) ); }
 	public static MPR li2( double r ){				return new MPR( operation6( r,			 55 ) ); }
 	// Stat functions --------------------------------------------------------------------------------------------------
-	/*public static R sum( R... list ){
-		R res = ZERO;
+	public static MPR sum( MPR... list ){
+		MPR res = ZERO;
 		for( int i = 0; i < list.length; i++ )	res = res.add( list[ i ] );
 		return res;
 	}
-	public static R sum( double... list ){
-		R res = ZERO;
+	public static MPR sum( double... list ){
+		MPR res = ZERO;
 		for( int i = 0; i < list.length; i++ )	res = res.add( list[ i ] );
 		return res;
 	}
-	public static R sum( Collection<R> col ){
-		R res = ZERO;
+	public static MPR sum( Collection<MPR> col ){
+		MPR res = ZERO;
 		if( ! col.isEmpty() ){
-			for( R r : col )	res = res.add( r );
+			for( MPR r : col )	res = res.add( r );
 		}
 		return res;
 	}
-	public static R sum( Stream<R> stream ){ return stream.reduce( ZERO, ( a, b) -> a.add( b ) ); }
-	public static R product( R... list ){
-		R res = ONE;
+	public static MPR sum( Stream<MPR> stream ){ return stream.reduce( ZERO, ( a, b) -> a.add( b ) ); }
+	public static MPR product( MPR... list ){
+		MPR res = ONE;
 		for( int i = 0; i < list.length; i++ )	res = res.mul( list[ i ] );
 		return res;
 	}
-	public static R product( double... list ){
-		R res = ONE;
+	public static MPR product( double... list ){
+		MPR res = ONE;
 		for( int i = 0; i < list.length; i++ )	res = res.mul( list[ i ] );
 		return res;
 	}
-	public static R product( Collection<R> col ){
-		R res = ONE;
+	public static MPR product( Collection<MPR> col ){
+		MPR res = ONE;
 		if( ! col.isEmpty() ){
-			for( R r : col )	res = res.mul( r );
+			for( MPR r : col )	res = res.mul( r );
 		}
 		return res;
 	}
-	public static R product( Stream<R> stream ){ return stream.reduce( ONE, (a, b) -> a.mul( b ) ); }
-	public static R max( R... list ){
-		if( list.length == 0 )	return R.INF_N;
-		R res = list[0];
-		for( int i = 1; i < list.length; i++ )	res = R.max( res, list[ i ] );
+	public static MPR product( Stream<MPR> stream ){ return stream.reduce( ONE, (a, b) -> a.mul( b ) ); }
+	public static MPR max( MPR... list ){
+		if( list.length == 0 )	return MPR.INF_N;
+		MPR res = list[0];
+		for( int i = 1; i < list.length; i++ )	res = MPR.max( res, list[ i ] );
 		return res;
 	}
-	public static R max( double... list ){
-		if( list.length == 0 )	return R.INF_N;
-		R res = new R( list[0] );
-		for( int i = 1; i < list.length; i++ )	res = R.max( res, list[ i ] );
+	public static MPR max( double... list ){
+		if( list.length == 0 )	return MPR.INF_N;
+		MPR res = MPR.valueOf( list[0] );
+		for( int i = 1; i < list.length; i++ )	res = MPR.max( res, list[ i ] );
 		return res;
 	}
-	public static R max( Collection<R> col ){
-		if( col.isEmpty() )	return R.INF_N;
-		R res = R.INF_N;
-		for( R r : col )	res = R.max( res, r );
+	public static MPR max( Collection<MPR> col ){
+		if( col.isEmpty() )	return MPR.INF_N;
+		MPR res = MPR.INF_N;
+		for( MPR r : col )	res = MPR.max( res, r );
 		return res;
 	}
-	public static R max( Stream<R> stream ){ return stream.reduce( R.INF_N, R::max ); }
-	public static R min( R... list ){
+	public static MPR max( Stream<MPR> stream ){ return stream.reduce( MPR.INF_N, MPR::max ); }
+	/*public static R min( R... list ){
 		if( list.length == 0 )	return R.INF_P;
 		R res = list[0];
 		for( int i = 1; i < list.length; i++ )	res = R.min( res, list[ i ] );

@@ -101,6 +101,11 @@ Java_edu_spl_MPR_check( JNIEnv *env, jobject obj, jlong ptr, jint ope ){
 	}
 }
 
+JNIEXPORT jint JNICALL
+Java_edu_spl_MPR_getSign( JNIEnv *env, jobject obj, jlong ptr ){
+	return sgn( *((mpreal*)ptr) );
+}
+
 /*	TODO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	const mpreal eps         =    std::numeric_limits<mpreal>::epsilon();
 	const int    base        =    std::numeric_limits<mpreal>::radix;
