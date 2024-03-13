@@ -445,170 +445,170 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 		return res;
 	}
 	public static MPR max( Stream<MPR> stream ){ return stream.reduce( MPR.INF_N, MPR::max ); }
-	/*public static R min( R... list ){
-		if( list.length == 0 )	return R.INF_P;
-		R res = list[0];
-		for( int i = 1; i < list.length; i++ )	res = R.min( res, list[ i ] );
+	public static MPR min( MPR... list ){
+		if( list.length == 0 )	return MPR.INF_P;
+		MPR res = list[0];
+		for( int i = 1; i < list.length; i++ )	res = MPR.min( res, list[ i ] );
 		return res;
 	}
-	public static R min( double... list ){
-		if( list.length == 0 )	return R.INF_P;
-		R res = new R( list[0] );
-		for( int i = 1; i < list.length; i++ )	res = R.min( res, list[ i ] );
+	public static MPR min( double... list ){
+		if( list.length == 0 )	return MPR.INF_P;
+		MPR res = MPR.valueOf( list[0] );
+		for( int i = 1; i < list.length; i++ )	res = MPR.min( res, list[ i ] );
 		return res;
 	}
-	public static R min( Collection<R> col ){
-		if( col.isEmpty() )	return R.INF_P;
-		R res = R.INF_P;
-		for( R r : col )	res = R.min( res, r );
+	public static MPR min( Collection<MPR> col ){
+		if( col.isEmpty() )	return MPR.INF_P;
+		MPR res = MPR.INF_P;
+		for( MPR r : col )	res = MPR.min( res, r );
 		return res;
 	}
-	public static R min( Stream<R> stream ){ return stream.reduce( R.INF_P, R::min ); }
-	public static R[] minMax( R... list ){
-		if( list.length == 0 )	return new R[]{ R.INF_P, R.INF_N };
-		R resMin = list[0], resMax = list[0];
+	public static MPR min( Stream<MPR> stream ){ return stream.reduce( MPR.INF_P, MPR::min ); }
+	public static MPR[] minMax( MPR... list ){
+		if( list.length == 0 )	return new MPR[]{ MPR.INF_P, MPR.INF_N };
+		MPR resMin = list[0], resMax = list[0];
 		for( int i = 1; i < list.length; i++ ){
-			resMin = R.min( resMin, list[ i ] );
-			resMax = R.max( resMax, list[ i ] );
+			resMin = MPR.min( resMin, list[ i ] );
+			resMax = MPR.max( resMax, list[ i ] );
 		}
-		return new R[]{ resMin, resMax };
+		return new MPR[]{ resMin, resMax };
 	}
-	public static R[] minMax( double... list ){
-		if( list.length == 0 )	return new R[]{ R.INF_P, R.INF_N };
-		R first = new R( list[0] );
-		R resMin = first, resMax = first;
+	public static MPR[] minMax( double... list ){
+		if( list.length == 0 )	return new MPR[]{ MPR.INF_P, MPR.INF_N };
+		MPR first = MPR.valueOf( list[0] );
+		MPR resMin = first, resMax = first;
 		for( int i = 1; i < list.length; i++ ){
-			resMin = R.min( resMin, list[ i ] );
-			resMax = R.max( resMax, list[ i ] );
+			resMin = MPR.min( resMin, list[ i ] );
+			resMax = MPR.max( resMax, list[ i ] );
 		}
-		return new R[]{ resMin, resMax };
+		return new MPR[]{ resMin, resMax };
 	}
-	public static R[] minMax( Collection<R> col ){
-		if( col.isEmpty() )	return new R[]{ R.INF_P, R.INF_N };
-		R resMin = R.INF_P, resMax = R.INF_N;
-		for( R r : col ){
-			resMin = R.min( resMin, r );
-			resMax = R.max( resMax, r );
+	public static MPR[] minMax( Collection<MPR> col ){
+		if( col.isEmpty() )	return new MPR[]{ MPR.INF_P, MPR.INF_N };
+		MPR resMin = MPR.INF_P, resMax = MPR.INF_N;
+		for( MPR r : col ){
+			resMin = MPR.min( resMin, r );
+			resMax = MPR.max( resMax, r );
 		}
-		return new R[]{ resMin, resMax };
+		return new MPR[]{ resMin, resMax };
 	}
-	public static R[] minMax( Stream<R> stream ){
-		return stream.reduce( new R[]{ R.INF_P, R.INF_N }							// Identity (initial value)
-				, (a, r) -> new R[]{ R.min( a[0], r ), R.max( a[1], r ) }			// Accumulator: a = array, r = Stream value
-				, (c, d) -> new R[]{ R.min( c[0], d[0] ), R.max( c[1], d[1] ) }		// Combiner for parallelization
+	public static MPR[] minMax( Stream<MPR> stream ){
+		return stream.reduce( new MPR[]{ MPR.INF_P, MPR.INF_N }							// Identity (initial value)
+				, (a, r) -> new MPR[]{ MPR.min( a[0], r ), MPR.max( a[1], r ) }			// Accumulator: a = array, r = Stream value
+				, (c, d) -> new MPR[]{ MPR.min( c[0], d[0] ), MPR.max( c[1], d[1] ) }	// Combiner for parallelization
 		);
 	}
-	public static R mean( R... list ){
+	public static MPR mean( MPR... list ){
 		if( list.length == 0 )	return ZERO;
-		R res = list[0];
+		MPR res = list[0];
 		for( int i = 1; i < list.length; i++ )	res = res.add( list[ i ] );
 		return res.div( list.length );
 	}
-	public static R mean( double... list ){
+	public static MPR mean( double... list ){
 		if( list.length == 0 )	return ZERO;
-		R res = new R( list[0] );
+		MPR res = MPR.valueOf( list[0] );
 		for( int i = 1; i < list.length; i++ )	res = res.add( list[ i ] );
 		return res.div( list.length );
 	}
-	public static R mean( Collection<R> col ){
+	public static MPR mean( Collection<MPR> col ){
 		if( col.isEmpty() )	return ZERO;
-		R res = ZERO;
-		for( R r : col )	res = res.add( r );
+		MPR res = ZERO;
+		for( MPR r : col )	res = res.add( r );
 		return res.div( col.size() );
 	}
-	public static R mean( Stream<R> stream ){
-		R sum = ZERO;
+	public static MPR mean( Stream<MPR> stream ){
+		MPR sum = ZERO;
 		long counter = 0;
-		for( R r : (Iterable<R>)stream::iterator ){
+		for( MPR r : (Iterable<MPR>)stream::iterator ){
 			sum.add( r );
 			counter++;
 		}
 		return counter > 0 ? sum.div( counter ) : ZERO;
 	}
-	public static R sd( boolean sample, R mean, R... list ){
+	public static MPR sd( boolean sample, MPR mean, MPR... list ){
 		if( list.length < 2 )	return ZERO;
-		R sum = ZERO;
+		MPR sum = ZERO;
 		for( int i = 0; i < list.length; i++ )	sum = sum.add( list[ i ].sub( mean ).sqr() );
-		return sample ? R.sqrt( sum.div( list.length - 1 ) ) : R.sqrt( sum.div( list.length ) );
+		return sample ? MPR.sqrt( sum.div( list.length - 1 ) ) : MPR.sqrt( sum.div( list.length ) );
 	}
-	public static R sd( R mean, R... list ){ return sd( false, mean, list ); }
-	public static R sd( boolean sample, double mean, double... list ){
+	public static MPR sd( MPR mean, MPR... list ){ return sd( false, mean, list ); }
+	public static MPR sd( boolean sample, double mean, double... list ){
 		if( list.length < 2 )	return ZERO;
-		R sum = ZERO;
-		for( int i = 0; i < list.length; i++ )	sum = sum.add( new R( list[ i ] ).sub( mean ).sqr() );
-		return sample ? R.sqrt( sum.div( list.length - 1 ) ) : R.sqrt( sum.div( list.length ) );
+		MPR sum = ZERO;
+		for( int i = 0; i < list.length; i++ )	sum = sum.add( MPR.valueOf( list[ i ] ).sub( mean ).sqr() );
+		return sample ? MPR.sqrt( sum.div( list.length - 1 ) ) : MPR.sqrt( sum.div( list.length ) );
 	}
-	public static R sd( double mean, double... list ){ return sd( false, mean, list ); }
-	public static R sd( boolean sample, R mean, Collection<R> col ){
+	public static MPR sd( double mean, double... list ){ return sd( false, mean, list ); }
+	public static MPR sd( boolean sample, MPR mean, Collection<MPR> col ){
 		if( col.size() < 2 )	return ZERO;
-		R sum = ZERO;
-		for( R r : col )	sum = sum.add( r.sub( mean ).sqr() );
-		return sample ? R.sqrt( sum.div( col.size() - 1 ) ) : R.sqrt( sum.div( col.size() ) );
+		MPR sum = ZERO;
+		for( MPR r : col )	sum = sum.add( r.sub( mean ).sqr() );
+		return sample ? MPR.sqrt( sum.div( col.size() - 1 ) ) : MPR.sqrt( sum.div( col.size() ) );
 	}
-	public static R sd( R mean, Collection<R> col ){ return sd( false, mean, col ); }
-	public static R sd( boolean sample, R mean, Stream<R> stream ){
-		R sum = ZERO;
+	public static MPR sd( MPR mean, Collection<MPR> col ){ return sd( false, mean, col ); }
+	public static MPR sd( boolean sample, MPR mean, Stream<MPR> stream ){
+		MPR sum = ZERO;
 		long counter = 0;
-		for( R r : (Iterable<R>)stream::iterator ){
+		for( MPR r : (Iterable<MPR>)stream::iterator ){
 			sum.add( r.sub( mean ).sqr() );
 			counter++;
 		}
 		if( counter < 2 )	return ZERO;
-		return sample ? R.sqrt( sum.div( counter - 1 ) ) : R.sqrt( sum.div( counter ) );
+		return sample ? MPR.sqrt( sum.div( counter - 1 ) ) : MPR.sqrt( sum.div( counter ) );
 	}
-	public static R sd( R mean, Stream<R> stream ){ return sd( false, mean, stream ); }
-	public static R[] meanSD( boolean sample, R... list ){
-		if( list.length == 0 )	return new R[]{ R.NAN, R.NAN };
-		if( list.length == 1 )	return new R[]{ list[0], ZERO };
-		R aux, s = ZERO, s2 = ZERO;
+	public static MPR sd( MPR mean, Stream<MPR> stream ){ return sd( false, mean, stream ); }
+	public static MPR[] meanSD( boolean sample, MPR... list ){
+		if( list.length == 0 )	return new MPR[]{ MPR.NAN, MPR.NAN };
+		if( list.length == 1 )	return new MPR[]{ list[0], ZERO };
+		MPR aux, s = ZERO, s2 = ZERO;
 		for( int i = 0; i < list.length; i++ ){
 			aux = list[ i ];
 			s = s.add( aux );
 			s2 = s2.add( aux.sqr() );
 		}
-		R mean = s.div( list.length );
-		R variance = s2.div( (sample ? list.length - 1 : list.length) ).sub( mean.sqr() );
-		return new R[]{ mean, R.sqrt( variance ) };
+		MPR mean = s.div( list.length );
+		MPR variance = s2.div( (sample ? list.length - 1 : list.length) ).sub( mean.sqr() );
+		return new MPR[]{ mean, MPR.sqrt( variance ) };
 	}
-	public static R[] meanSD( R... list ){ return meanSD( false, list ); }
-	public static R[] meanSD( boolean sample, double... list ){
-		if( list.length == 0 )	return new R[]{ R.NAN, R.NAN };
-		if( list.length == 1 )	return new R[]{ new R( list[0] ), ZERO };
-		R aux, s = ZERO, s2 = ZERO;
+	public static MPR[] meanSD( MPR... list ){ return meanSD( false, list ); }
+	public static MPR[] meanSD( boolean sample, double... list ){
+		if( list.length == 0 )	return new MPR[]{ MPR.NAN, MPR.NAN };
+		if( list.length == 1 )	return new MPR[]{ MPR.valueOf( list[0] ), ZERO };
+		MPR aux, s = ZERO, s2 = ZERO;
 		for( int i = 0; i < list.length; i++ ){
-			aux = new R( list[ i ] );
+			aux = MPR.valueOf( list[ i ] );
 			s = s.add( aux );
 			s2 = s2.add( aux.sqr() );
 		}
-		R mean = s.div( list.length );
-		R variance = s2.div( (sample ? list.length - 1 : list.length) ).sub( mean.sqr() );
-		return new R[]{ mean, R.sqrt( variance ) };
+		MPR mean = s.div( list.length );
+		MPR variance = s2.div( (sample ? list.length - 1 : list.length) ).sub( mean.sqr() );
+		return new MPR[]{ mean, MPR.sqrt( variance ) };
 	}
-	public static R[] meanSD( double... list ){ return meanSD( false, list ); }
-	public static R[] meanSD( boolean sample, Collection<R> col ){
-		if( col.isEmpty() )	return new R[]{ R.NAN, R.NAN };
+	public static MPR[] meanSD( double... list ){ return meanSD( false, list ); }
+	public static MPR[] meanSD( boolean sample, Collection<MPR> col ){
+		if( col.isEmpty() )	return new MPR[]{ MPR.NAN, MPR.NAN };
 		int length = col.size();
 		if( length == 1 ){
-			R inside = new R();
-			for( R r : col )	inside = r;
-			return new R[]{ inside, ZERO };
+			MPR inside = MPR.NAN;
+			for( MPR r : col )	inside = r;
+			return new MPR[]{ inside, ZERO };
 		}
-		R s = ZERO, s2 = ZERO;
-		for( R r : col ){
+		MPR s = ZERO, s2 = ZERO;
+		for( MPR r : col ){
 			s = s.add( r );
 			s2 = s2.add( r.sqr() );
 		}
-		R mean = s.div( length );
-		R variance = s2.div( (sample ? length - 1 : length) ).sub( mean.sqr() );
-		return new R[]{ mean, R.sqrt( variance ) };
+		MPR mean = s.div( length );
+		MPR variance = s2.div( (sample ? length - 1 : length) ).sub( mean.sqr() );
+		return new MPR[]{ mean, MPR.sqrt( variance ) };
 	}
-	public static R[] meanSD( Collection<R> col ){ return meanSD( false, col ); }
+	public static MPR[] meanSD( Collection<MPR> col ){ return meanSD( false, col ); }
 	public static class SummaryStatistics {
 		private long count;
-		private R sum, sumSquared, min, max;
+		private MPR sum, sumSquared, min, max;
 
 		// Helpers
-		private R mean = null, variance = null, varianceSample = null;
+		private MPR mean = null, variance = null, varianceSample = null;
 
 		public SummaryStatistics(){
 			count		= 0;
@@ -617,38 +617,38 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 			min			= INF_P;
 			max			= INF_N;
 		}
-		public void accept( R value ){
+		public void accept( MPR value ){
 			count++;
 			sum			= sum.add( value );
 			sumSquared	= sumSquared.add( value.sqr() );
-			min			= R.min( min, value );
-			max			= R.max( max, value );
+			min			= MPR.min( min, value );
+			max			= MPR.max( max, value );
 		}
 		public SummaryStatistics combine( SummaryStatistics other ){
 			count		+= other.count;
 			sum			= sum.add( other.sum );
 			sumSquared	= sumSquared.add( other.sumSquared );
-			min			= R.min( min, other.min );
-			max			= R.max( max, other.max );
+			min			= MPR.min( min, other.min );
+			max			= MPR.max( max, other.max );
 			return this;
 		}
 		public long getCount(){ return count; }
-		public R getSum(){ return sum; }
-		public R getSumSquared(){ return sumSquared; }
-		public R getMin(){ return min; }
-		public R getMax(){ return max; }
-		public R getMean(){
+		public MPR getSum(){ return sum; }
+		public MPR getSumSquared(){ return sumSquared; }
+		public MPR getMin(){ return min; }
+		public MPR getMax(){ return max; }
+		public MPR getMean(){
 			if( mean == null ){
 				mean = count == 0 ? ZERO : sum.div( count );
 			}
 			return mean;
 		}
-		public R getVariance( boolean sample ){
+		public MPR getVariance( boolean sample ){
 			if( sample ){
 				if( varianceSample == null ){
 					if( count < 2 )	varianceSample = ZERO;
 					else{
-						R _mean = getMean();
+						MPR _mean = getMean();
 						varianceSample = sumSquared.div( count - 1 ).sub( _mean.sqr() );
 					}
 				}
@@ -657,35 +657,32 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 			if( variance == null ){
 				if( count < 2 )	variance = ZERO;
 				else{
-					R _mean = getMean();
+					MPR _mean = getMean();
 					variance = sumSquared.div( count ).sub( _mean.sqr() );
 				}
 			}
 			return variance;
 		}
-		public R getVariance(){ return getVariance( false ); }
-		public R getSD( boolean sample ){ return R.sqrt( getVariance( sample ) ); }
-		public R getSD(){ return R.sqrt( getVariance( false ) ); }
+		public MPR getVariance(){ return getVariance( false ); }
+		public MPR getSD( boolean sample ){ return MPR.sqrt( getVariance( sample ) ); }
+		public MPR getSD(){ return MPR.sqrt( getVariance( false ) ); }
 	}
-	public static R[] meanSD( boolean sample, Stream<R> stream ){
+	public static MPR[] meanSD( boolean sample, Stream<MPR> stream ){
 		SummaryStatistics accumulator = stream.collect(
 				SummaryStatistics::new
 				, SummaryStatistics::accept
 				, SummaryStatistics::combine
 		);
-		R mean	= accumulator.getMean();
-		R sd	= accumulator.getSD( sample );
-		return new R[]{ mean, sd };
+		MPR mean	= accumulator.getMean();
+		MPR sd	= accumulator.getSD( sample );
+		return new MPR[]{ mean, sd };
 	}
-	public static R[] meanSD( Stream<R> stream ){ return meanSD( false, stream ); }
-	public static SummaryStatistics getStatistics( Stream<R> stream ){
+	public static MPR[] meanSD( Stream<MPR> stream ){ return meanSD( false, stream ); }
+	public static SummaryStatistics getStatistics( Stream<MPR> stream ){
 		return stream.collect(
 				SummaryStatistics::new
 				, SummaryStatistics::accept
 				, SummaryStatistics::combine
 		);
 	}
-	public static R distNormal( R x, R mean, R sd ){
-		return R.exp( x.sub( mean ).div( sd ).sqr().div( -2 ) ).mul( M_1_SQRT2PI ).div( sd );	// TODO improve
-	}*/
 }
