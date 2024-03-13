@@ -16,6 +16,9 @@ public class Main {
 
 			MPR pi2 = myOne.sqr();
 			System.out.println( "PI^2: " + pi2 + ", nan ?: " + pi2.isNan() + ", inf ?: " + pi2.isInfP() );
+
+			MPR fromModf[] = MPR.modf( MPR.M_PI );
+			System.out.println( "frac: " + fromModf[0] + ", int: " + fromModf[1] );
 		}
 		MPR rand = MPR.randomSeed();
 		System.out.println( rand );

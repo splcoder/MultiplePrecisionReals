@@ -93,6 +93,8 @@ private:
 				case 39:	out = getMemDirection( acsch( value ) );		break;
 				case 40:	out = getMemDirection( asech( value ) );		break;
 				case 41:	out = getMemDirection( acoth( value ) );		break;
+				case 42:	out = getMemDirection( besselj0( value ) );		break;
+				case 43:	out = getMemDirection( besselj1( value ) );		break;
     			default: out = 0;	// nullptr (it never reachs this point)
     		}
     	}

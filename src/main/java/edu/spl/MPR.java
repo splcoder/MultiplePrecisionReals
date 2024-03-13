@@ -337,8 +337,26 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 	public static MPR mod( MPR l, double b ){		return new MPR( operation2( l.ptr, b,    12 ) ); }
 	public static MPR mod( double l, MPR b ){		return new MPR( operation3( l, b.ptr,    12 ) ); }
 	public static MPR mod( double l, double b ){	return new MPR( operation4( l, b,        12 ) ); }
-	// TODO modf // decompose the floating-point number: [fractpart, intpart]
+	public static MPR[] modf( MPR r ){    // decompose the floating-point number: [fractpart, intpart]
+		long[] v = operation7( r.ptr, 2 );
+		if( v == null )		throw new RuntimeException( "MPR -> the native array could not be allocated" );
+		return new MPR[]{ new MPR( v[0] ), new MPR( v[1] ) };
+	}
+	public static MPR[] modf( double r ){
+		long[] v = operation8( r, 2 );
+		if( v == null )		throw new RuntimeException( "MPR -> the native array could not be allocated" );
+		return new MPR[]{ new MPR( v[0] ), new MPR( v[1] ) };
+	}
+
 	// Bessel functions ------------------------------------------------------------------------------------------------
+	public static MPR besselj0( MPR r ){			return new MPR( operation5( r.ptr,       42 ) ); }
+	public static MPR besselj0( double r ){			return new MPR( operation6( r,			 42 ) ); }
+	public static MPR besselj1( MPR r ){			return new MPR( operation5( r.ptr,       43 ) ); }
+	public static MPR besselj1( double r ){			return new MPR( operation6( r,			 43 ) ); }
+	private static native long operation9( int order, long ptr, int ope );
+	private static native long operation10( int order, double value, int ope );
+	// Bessel function of the first kind, n-th order
+	//public static MPR besseljn( int order, MPR r ){	}
 	// Other functions -------------------------------------------------------------------------------------------------
 	// Stat functions --------------------------------------------------------------------------------------------------
 }

@@ -167,6 +167,7 @@ void exeOperation1Arg2Out( mpreal &out1, mpreal &out2, jint ope, const mpreal &v
 	switch( ope ){
 		case 0: sin_cos( out1, out2, value );		break;
 		case 1: sinh_cosh( out1, out2, value );		break;
+		case 2: out1 = modf( value, out2 );			break;
         default: out1 = mpreal().setNan(); out2 = mpreal().setNan();
 	}
 }
