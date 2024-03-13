@@ -203,6 +203,27 @@ Java_edu_spl_MPR_operation8( JNIEnv *env, jobject obj, jdouble val, jint ope ){
 	return outJNIArray;
 }
 
+jlong exeOperation2Arg1Out( jint order, const mpreal &value, jint ope ){
+	switch( ope ){
+		case 0: return MPRF::getMemDirection( besseljn( order, value ) );
+		case 1: return MPRF::getMemDirection( besselyn( order, value ) );
+		case 2: return MPRF::getMemDirection( root( value, order ) );
+	}
+	return 0;	// nullptr
+}
+
+JNIEXPORT jlong JNICALL
+Java_edu_spl_MPR_operation9( JNIEnv *env, jobject obj, jint order, jlong ptr, jint ope ){
+	mpreal *value = (mpreal*)ptr;
+	return exeOperation2Arg1Out( order, *value, ope );
+}
+
+JNIEXPORT jlong JNICALL
+Java_edu_spl_MPR_operation10( JNIEnv *env, jobject obj, jint order, jdouble val, jint ope ){
+	mpreal value( val );
+	return exeOperation2Arg1Out( order, value, ope );
+}
+
 #ifdef __cplusplus
 }
 #endif

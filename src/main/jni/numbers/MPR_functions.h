@@ -95,6 +95,18 @@ private:
 				case 41:	out = getMemDirection( acoth( value ) );		break;
 				case 42:	out = getMemDirection( besselj0( value ) );		break;
 				case 43:	out = getMemDirection( besselj1( value ) );		break;
+				case 44:	out = getMemDirection( bessely0( value ) );		break;
+				case 45:	out = getMemDirection( bessely1( value ) );		break;
+				case 46:	out = getMemDirection( erf( value ) );			break;
+				case 47:	out = getMemDirection( erfc( value ) );			break;
+				case 48:	out = getMemDirection( lgamma( value ) );		break;
+				case 49:	out = getMemDirection( tgamma( value ) );		break;
+				case 50:	out = getMemDirection( lngamma( value ) );		break;
+				case 51:	out = getMemDirection( gamma( value ) );		break;
+				case 52:	out = getMemDirection( digamma( value ) );		break;
+				case 53:	out = getMemDirection( zeta( value ) );			break;
+				case 54:	out = getMemDirection( ai( value ) );			break;
+				case 55:	out = getMemDirection( li2( value ) );			break;
     			default: out = 0;	// nullptr (it never reachs this point)
     		}
     	}

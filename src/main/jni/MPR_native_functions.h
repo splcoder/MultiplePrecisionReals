@@ -34,6 +34,8 @@ JNIEXPORT jlong			JNICALL Java_edu_spl_MPR_operation5( JNIEnv *env, jobject obj,
 JNIEXPORT jlong			JNICALL Java_edu_spl_MPR_operation6( JNIEnv *env, jobject obj, jdouble value, jint ope );
 JNIEXPORT jlongArray	JNICALL Java_edu_spl_MPR_operation7( JNIEnv *env, jobject obj, jlong ptr, jint ope );
 JNIEXPORT jlongArray	JNICALL Java_edu_spl_MPR_operation8( JNIEnv *env, jobject obj, jdouble val, jint ope );
+JNIEXPORT jlong			JNICALL Java_edu_spl_MPR_operation9( JNIEnv *env, jobject obj, jint order, jlong ptr, jint ope );
+JNIEXPORT jlong			JNICALL Java_edu_spl_MPR_operation10( JNIEnv *env, jobject obj, jint order, jdouble val, jint ope );
 
 #ifdef __cplusplus
 }
