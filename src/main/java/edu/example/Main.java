@@ -34,9 +34,11 @@ public class Main {
 			System.out.println( rand );
 		}
 
+		System.out.println( "Cos(1): " + MPR.cos( 1 ) );
+
 		MPR sc[] = MPR.sinCos( 1. );
 		System.out.println( "sin: " + sc[0] + ", cos: " + sc[1] );
 
-		System.out.println( "Saliendo..." );
+		System.out.println( "Ending..." );
 	}
 }

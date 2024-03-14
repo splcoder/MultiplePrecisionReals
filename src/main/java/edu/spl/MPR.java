@@ -11,7 +11,8 @@ import java.util.stream.Stream;
  * https://www.mpfr.org/mpfr-current/mpfr.html
  * https://github.com/advanpix/mpreal
  *
- * TODO https://github.com/JuliaLang/julia/issues/35796 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<	--enable-thread-safe
+ * https://github.com/JuliaLang/julia/issues/35796
+ * 			Is libmpfr.a (mingw64) compiled with: --enable-thread-safe		???
  *
  * See: https://www.baeldung.com/java-destructor
  * 		https://openjdk.org/jeps/421
@@ -19,7 +20,7 @@ import java.util.stream.Stream;
  */
 public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 	static {
-		//System.loadLibrary( "mpr" );
+		//System.loadLibrary( "mpr" );		// TODO <<< if it gives you problems then change the next line to your path
 		System.load("C:\\Users\\Sergio\\Desktop\\Cursos Certificacion\\Curso Java\\Projects\\MultiplePrecisionReals\\build\\libs\\mpr\\shared\\mpr.dll");
 	}
 	//------------------------------------------------------------------------------------------------------------------
