@@ -11,7 +11,7 @@ import java.util.stream.Stream;
  * https://www.mpfr.org/mpfr-current/mpfr.html
  * https://github.com/advanpix/mpreal
  *
- * TODO https://github.com/JuliaLang/julia/issues/35796 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ * TODO https://github.com/JuliaLang/julia/issues/35796 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<	--enable-thread-safe
  *
  * See: https://www.baeldung.com/java-destructor
  * 		https://openjdk.org/jeps/421
@@ -134,8 +134,6 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 		hash = 31 * hash + Long.hashCode( ptr );
 		return hash;
 	}
-	// Save to file / Load from file -----------------------------------------------------------------------------------
-	// TODO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 	// Basic functions -------------------------------------------------------------------------------------------------
 	private static native boolean check( long ptr, int ope );

@@ -93,7 +93,6 @@ model {
                     cppCompiler.args '-mmacosx-version-min=10.4'
 
                     linker.args '-mmacosx-version-min=10.4'
-                    //linker.args '-L/usr/local/lib', '-lquadmath'
                     linker.args '-L/usr/local/lib', '-lmpfr', '-lgmpxx', '-lgmp'
                 } else if (targetPlatform.operatingSystem.linux) {
                     cCompiler.args '-I', "${jvmHome}/include"
@@ -104,7 +103,6 @@ model {
                     cppCompiler.args '-I', "${jvmHome}/include/linux"
                     cppCompiler.args '-D_FILE_OFFSET_BITS=64'
 
-                    //linker.args '-L/usr/lib', '-lquadmath'
                     linker.args '-L/usr/lib', '-lmpfr', '-lgmpxx', '-lgmp'
                 } else if (targetPlatform.operatingSystem.windows) {
                     // compilador C
@@ -117,7 +115,6 @@ model {
                     cppCompiler.args "-I${jvmHome}/include/win32"
                     cppCompiler.args "-I${System.getProperty('java.home')}/include"
 
-                    //linker.args '-lquadmath'
                     linker.args '-lmpfr', '-lgmpxx', '-lgmp'
                 }
             }
