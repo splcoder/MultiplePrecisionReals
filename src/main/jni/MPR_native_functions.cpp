@@ -25,7 +25,7 @@ Java_edu_spl_MPR_initConstant( JNIEnv *env, jobject obj, jint cte ){
 		case -4:	return MPRF::getMemDirection( mpreal().setInf( -1 ) );
 		case -3:	return MPRF::getMemDirection( std::numeric_limits<mpreal>::max() );
         case -2:	return MPRF::getMemDirection( std::numeric_limits<mpreal>::min() );
-		//case -1:
+		case -1:	return MPRF::getMemDirection( std::numeric_limits<mpreal>::epsilon() * (mpreal)std::numeric_limits<mpreal>::radix );
 		case 0:		return MPRF::getMemDirection( 0.0 );
 		case 1:		return MPRF::getMemDirection( 1.0 );
 		case 2:		return MPRF::getMemDirection( mpfr::const_euler() );
@@ -105,38 +105,6 @@ JNIEXPORT jint JNICALL
 Java_edu_spl_MPR_getSign( JNIEnv *env, jobject obj, jlong ptr ){
 	return sgn( *((mpreal*)ptr) );
 }
-
-/*	TODO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	const mpreal eps         =    std::numeric_limits<mpreal>::epsilon();
-	const int    base        =    std::numeric_limits<mpreal>::radix;
-	const mpreal prec        =    eps * base;
-	const int bindigits      =    std::numeric_limits<mpreal>::digits(); // eqv. to mpfr::mpreal::get_default_prec();
-	const mpreal rnd         =    std::numeric_limits<mpreal>::round_error();
-	const mpreal small       =    one / maxval;
-	const mpreal sfmin       =    (small > minval) ? small * (one + eps) : minval;
-	const mpreal round       =    std::numeric_limits<mpreal>::round_style();
-	const int    min_exp     =    std::numeric_limits<mpreal>::min_exponent;
-	const mpreal underflow   =    std::numeric_limits<mpreal>::min();
-	const int    max_exp     =    std::numeric_limits<mpreal>::max_exponent;
-	const mpreal overflow    =    std::numeric_limits<mpreal>::max();
-
-	cout.precision(digits);    // Show all the digits
-	cout << "eps        =    "<<    eps         << endl;
-	cout << "base       =    "<<    base        << endl;
-	cout << "prec       =    "<<    prec        << endl;
-	cout << "b.digits   =    "<<    bindigits   << endl;
-	cout << "rnd        =    "<<    rnd         << endl;
-	cout << "maxval     =    "<<    maxval      << endl;
-	cout << "minval     =    "<<    minval      << endl;
-	cout << "small      =    "<<    small       << endl;
-	cout << "sfmin      =    "<<    sfmin       << endl;
-	cout << "1/sfmin    =    "<<    1 / sfmin   << endl;
-	cout << "round      =    "<<    round       << endl;
-	cout << "max_exp    =    "<<    max_exp     << endl;
-	cout << "min_exp    =    "<<    min_exp     << endl;
-	cout << "underflow  =    "<<    underflow   << endl;
-	cout << "overflow   =    "<<    overflow    << endl;
-*/
 
 JNIEXPORT jlong JNICALL
 Java_edu_spl_MPR_operation( JNIEnv *env, jobject obj, jlong lPtr, jlong rPtr, jint ope ){

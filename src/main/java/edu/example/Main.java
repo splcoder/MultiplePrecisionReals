@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 
 public class Main {
 	public static void main( String[] args ){
+		System.out.println( "Precision: " + MPR.PRECISION );
 		{
 			MPR myOne = MPR.M_PI;
 			double dOne = myOne.doubleValue();

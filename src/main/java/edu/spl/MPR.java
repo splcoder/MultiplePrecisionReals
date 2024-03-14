@@ -50,7 +50,7 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 	public static final MPR INF_N			= new MPR( -4, true );
 	public static final MPR MAX				= new MPR( -3, true );	// largest finite number
 	public static final MPR MIN_P			= new MPR( -2, true );	// smallest positive number
-	//public static final MPR PRECISION		= new MPR( -1, true );	// TODO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	public static final MPR PRECISION		= new MPR( -1, true );
 	public static final MPR ZERO			= new MPR( 0, true );
 	public static final MPR ONE				= new MPR( 1, true );
 	// Math constants --------------------------------------------------------------------------------------------------
@@ -674,7 +674,7 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 				, SummaryStatistics::combine
 		);
 		MPR mean	= accumulator.getMean();
-		MPR sd	= accumulator.getSD( sample );
+		MPR sd		= accumulator.getSD( sample );
 		return new MPR[]{ mean, sd };
 	}
 	public static MPR[] meanSD( Stream<MPR> stream ){ return meanSD( false, stream ); }
