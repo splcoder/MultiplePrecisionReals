@@ -22,7 +22,9 @@ COMPILER:
 
 #ifdef USE_HELMET_FOR_MPR
 	#include <map>
+	#include <mutex>
 	std::map<int64_t, std::unique_ptr<mpreal>> map_for_mpr;
+	std::mutex map_for_mpr_mutex;
 #endif
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -116,6 +118,7 @@ public:
 		std::unique_ptr<mpreal> uptr = std::make_unique<mpreal>( std::move( value ) );
 		#ifdef USE_HELMET_FOR_MPR
 			int64_t n_ptr = (int64_t)uptr.get();
+			std::lock_guard<std::mutex> guard( map_for_mpr_mutex );
 			map_for_mpr[ n_ptr ] = std::move( uptr );
 			return n_ptr;
 		#else
@@ -124,6 +127,7 @@ public:
 	}
 	static void freeMemDirection( const int64_t p_dir ){
 		#ifdef USE_HELMET_FOR_MPR
+			std::lock_guard<std::mutex> guard( map_for_mpr_mutex );
 			map_for_mpr.erase( p_dir );
     	#else
     		mpreal* p = (mpreal*)p_dir;
