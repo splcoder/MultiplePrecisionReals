@@ -406,7 +406,8 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 		}
 		return res;
 	}
-	public static MPR sum( Stream<MPR> stream ){ return stream.reduce( ZERO, ( a, b) -> a.add( b ) ); }
+	public static MPR sum( Stream<MPR> stream, boolean parallel ){ return parallel ? stream.parallel().reduce( ZERO, ( a, b) -> a.add( b ) ) : stream.reduce( ZERO, ( a, b) -> a.add( b ) ); }
+	public static MPR sum( Stream<MPR> stream ){ return sum( stream, false ); }
 	public static MPR product( MPR... list ){
 		MPR res = ONE;
 		for( int i = 0; i < list.length; i++ )	res = res.mul( list[ i ] );
@@ -424,7 +425,8 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 		}
 		return res;
 	}
-	public static MPR product( Stream<MPR> stream ){ return stream.reduce( ONE, (a, b) -> a.mul( b ) ); }
+	public static MPR product( Stream<MPR> stream, boolean parallel ){ return parallel ? stream.parallel().reduce( ONE, (a, b) -> a.mul( b ) ) : stream.reduce( ONE, (a, b) -> a.mul( b ) ); }
+	public static MPR product( Stream<MPR> stream ){ return product( stream, false ); }
 	public static MPR max( MPR... list ){
 		if( list.length == 0 )	return MPR.INF_N;
 		MPR res = list[0];
@@ -443,7 +445,8 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 		for( MPR r : col )	res = MPR.max( res, r );
 		return res;
 	}
-	public static MPR max( Stream<MPR> stream ){ return stream.reduce( MPR.INF_N, MPR::max ); }
+	public static MPR max( Stream<MPR> stream, boolean parallel ){ return parallel ? stream.parallel().reduce( MPR.INF_N, MPR::max ) : stream.reduce( MPR.INF_N, MPR::max ); }
+	public static MPR max( Stream<MPR> stream ){ return max( stream, false ); }
 	public static MPR min( MPR... list ){
 		if( list.length == 0 )	return MPR.INF_P;
 		MPR res = list[0];
@@ -462,7 +465,8 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 		for( MPR r : col )	res = MPR.min( res, r );
 		return res;
 	}
-	public static MPR min( Stream<MPR> stream ){ return stream.reduce( MPR.INF_P, MPR::min ); }
+	public static MPR min( Stream<MPR> stream, boolean parallel ){ return parallel ? stream.parallel().reduce( MPR.INF_P, MPR::min ) : stream.reduce( MPR.INF_P, MPR::min ); }
+	public static MPR min( Stream<MPR> stream ){ return min( stream, false ); }
 	public static MPR[] minMax( MPR... list ){
 		if( list.length == 0 )	return new MPR[]{ MPR.INF_P, MPR.INF_N };
 		MPR resMin = list[0], resMax = list[0];
@@ -491,12 +495,19 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 		}
 		return new MPR[]{ resMin, resMax };
 	}
-	public static MPR[] minMax( Stream<MPR> stream ){
-		return stream.reduce( new MPR[]{ MPR.INF_P, MPR.INF_N }							// Identity (initial value)
+	public static MPR[] minMax( Stream<MPR> stream, boolean parallel ){
+		return parallel ?
+			stream.parallel().reduce( new MPR[]{ MPR.INF_P, MPR.INF_N }					// Identity (initial value)
+				, (a, r) -> new MPR[]{ MPR.min( a[0], r ), MPR.max( a[1], r ) }			// Accumulator: a = array, r = Stream value
+				, (c, d) -> new MPR[]{ MPR.min( c[0], d[0] ), MPR.max( c[1], d[1] ) }	// Combiner for parallelization
+			)
+			:
+			stream.reduce( new MPR[]{ MPR.INF_P, MPR.INF_N }							// Identity (initial value)
 				, (a, r) -> new MPR[]{ MPR.min( a[0], r ), MPR.max( a[1], r ) }			// Accumulator: a = array, r = Stream value
 				, (c, d) -> new MPR[]{ MPR.min( c[0], d[0] ), MPR.max( c[1], d[1] ) }	// Combiner for parallelization
 		);
 	}
+	public static MPR[] minMax( Stream<MPR> stream ){ return minMax( stream, false ); }
 	public static MPR mean( MPR... list ){
 		if( list.length == 0 )	return ZERO;
 		MPR res = list[0];
@@ -515,7 +526,7 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 		for( MPR r : col )	res = res.add( r );
 		return res.div( col.size() );
 	}
-	public static MPR mean( Stream<MPR> stream ){
+	public static MPR mean( Stream<MPR> stream ){	// TODO improve por parallel
 		MPR sum = ZERO;
 		long counter = 0;
 		for( MPR r : (Iterable<MPR>)stream::iterator ){
@@ -545,7 +556,7 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 		return sample ? MPR.sqrt( sum.div( col.size() - 1 ) ) : MPR.sqrt( sum.div( col.size() ) );
 	}
 	public static MPR sd( MPR mean, Collection<MPR> col ){ return sd( false, mean, col ); }
-	public static MPR sd( boolean sample, MPR mean, Stream<MPR> stream ){
+	public static MPR sd( boolean sample, MPR mean, Stream<MPR> stream ){	// TODO improve for parallel
 		MPR sum = ZERO;
 		long counter = 0;
 		for( MPR r : (Iterable<MPR>)stream::iterator ){
@@ -666,8 +677,16 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 		public MPR getSD( boolean sample ){ return MPR.sqrt( getVariance( sample ) ); }
 		public MPR getSD(){ return MPR.sqrt( getVariance( false ) ); }
 	}
-	public static MPR[] meanSD( boolean sample, Stream<MPR> stream ){
-		SummaryStatistics accumulator = stream.collect(
+	// TODO stream.parallel()
+	public static MPR[] meanSD( boolean sample, Stream<MPR> stream, boolean parallel ){
+		SummaryStatistics accumulator = parallel ?
+			stream.parallel().collect(
+				SummaryStatistics::new
+				, SummaryStatistics::accept
+				, SummaryStatistics::combine
+			)
+			:
+			stream.collect(
 				SummaryStatistics::new
 				, SummaryStatistics::accept
 				, SummaryStatistics::combine
@@ -676,12 +695,22 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 		MPR sd		= accumulator.getSD( sample );
 		return new MPR[]{ mean, sd };
 	}
-	public static MPR[] meanSD( Stream<MPR> stream ){ return meanSD( false, stream ); }
-	public static SummaryStatistics getStatistics( Stream<MPR> stream ){
-		return stream.collect(
+	public static MPR[] meanSD( boolean sample, Stream<MPR> stream ){ return meanSD( sample, stream, false ); }
+	public static MPR[] meanSD( Stream<MPR> stream, boolean parallel ){ return meanSD( false, stream, parallel ); }
+	public static MPR[] meanSD( Stream<MPR> stream ){ return meanSD( false, stream, false ); }
+	public static SummaryStatistics getStatistics( Stream<MPR> stream, boolean parallel ){
+		return parallel ?
+			stream.parallel().collect(
+				SummaryStatistics::new
+				, SummaryStatistics::accept
+				, SummaryStatistics::combine
+			)
+			:
+			stream.collect(
 				SummaryStatistics::new
 				, SummaryStatistics::accept
 				, SummaryStatistics::combine
 		);
 	}
+	public static SummaryStatistics getStatistics( Stream<MPR> stream ){ return getStatistics( stream, false ); }
 }
