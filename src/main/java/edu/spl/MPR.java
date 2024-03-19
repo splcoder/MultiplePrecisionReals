@@ -677,7 +677,6 @@ public class MPR extends Number implements Comparable<MPR>, AutoCloseable {
 		public MPR getSD( boolean sample ){ return MPR.sqrt( getVariance( sample ) ); }
 		public MPR getSD(){ return MPR.sqrt( getVariance( false ) ); }
 	}
-	// TODO stream.parallel()
 	public static MPR[] meanSD( boolean sample, Stream<MPR> stream, boolean parallel ){
 		SummaryStatistics accumulator = parallel ?
 			stream.parallel().collect(
