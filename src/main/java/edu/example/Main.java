@@ -39,6 +39,13 @@ public class Main {
 		MPR sc[] = MPR.sinCos( 1. );
 		System.out.println( "sin: " + sc[0] + ", cos: " + sc[1] );
 
+		long t = System.currentTimeMillis();
+		Stream<MPR> stream = Stream.iterate( MPR.ONE, n -> n.add( MPR.ONE ) ).limit( 1000000 );
+		MPR.SummaryStatistics ss = MPR.getStatistics( stream );
+		System.out.println( "SummaryStatistics:\n" + ss );
+		t = System.currentTimeMillis() - t;
+		System.out.println( "TIME: " + (t/1000.) );
+
 		System.out.println( "Ending..." );
 	}
 }
